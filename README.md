@@ -117,3 +117,7 @@ Todo push na branch de produção gera um novo deploy automaticamente.
 ## Observação sobre o PDF de origem
 
 O arquivo `Apresentação comercial atualizada-2026.pdf` (material comercial usado como fonte de todo o conteúdo) fica fora do controle de versão (`.gitignore`) porque contém dados de contato pessoais e não precisa ser publicado junto com o código. Ele permanece no seu disco local como referência.
+
+## Sobre a pasta `Logo/`
+
+A pasta `Logo/` na raiz do projeto contém os arquivos originais da logo oficial fornecidos pela empresa (`VB Engenharia Logo.png`, com fundo branco, e `VB Engenharia Logo Without Background.png`, com transparência). O site usa uma versão recortada e tratada desses arquivos em `src/assets/images/logo/vb-engenharia-logo.png` — a transparência original tinha uma franja de cor nas bordas (resíduo da remoção de fundo) que foi corrigida antes do recorte. Os arquivos da pasta `Logo/` ficam guardados como fonte, caso seja necessário gerar um novo recorte no futuro.
