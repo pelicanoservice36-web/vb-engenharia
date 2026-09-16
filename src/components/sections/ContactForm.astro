@@ -1,0 +1,129 @@
+---
+import { serviceOptions } from '../../data/services';
+---
+
+<form class="contact-form" id="contact-form" data-contact-form novalidate>
+  <div class="contact-form__row">
+    <label for="cf-name">Nome</label>
+    <input id="cf-name" name="name" type="text" autocomplete="name" required />
+  </div>
+
+  <div class="contact-form__row">
+    <label for="cf-company">Empresa</label>
+    <input id="cf-company" name="company" type="text" autocomplete="organization" />
+  </div>
+
+  <div class="contact-form__grid">
+    <div class="contact-form__row">
+      <label for="cf-phone">Telefone</label>
+      <input id="cf-phone" name="phone" type="tel" autocomplete="tel" required />
+    </div>
+
+    <div class="contact-form__row">
+      <label for="cf-email">E-mail</label>
+      <input id="cf-email" name="email" type="email" autocomplete="email" required />
+    </div>
+  </div>
+
+  <div class="contact-form__row">
+    <label for="cf-service">Serviço de interesse</label>
+    <select id="cf-service" name="service" required>
+      <option value="" selected disabled>Selecione um serviço</option>
+      {serviceOptions.map((option) => (
+        <option value={option}>{option}</option>
+      ))}
+      <option value="Outro">Outro</option>
+    </select>
+  </div>
+
+  <div class="contact-form__row">
+    <label for="cf-message">Mensagem</label>
+    <textarea id="cf-message" name="message" rows="4" required></textarea>
+  </div>
+
+  <p class="contact-form__status" role="status" aria-live="polite" data-contact-form-status hidden></p>
+
+  <button type="submit" class="contact-form__submit">Enviar mensagem</button>
+</form>
+
+<style>
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    color: var(--color-graphite);
+  }
+
+  .contact-form__row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+  }
+
+  .contact-form__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+  }
+
+  label {
+    font-size: var(--fs-small);
+    font-weight: 600;
+    color: var(--color-navy);
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 0.7rem 0.85rem;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-white);
+  }
+
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    border-color: var(--color-blue-electric);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .contact-form__submit {
+    align-self: flex-start;
+    padding: 0.85rem 1.75rem;
+    border-radius: var(--radius-md);
+    border: none;
+    background: var(--color-blue-electric);
+    color: var(--color-white);
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 48px;
+    transition: background-color var(--duration-base) var(--ease-standard);
+  }
+
+  .contact-form__submit:hover {
+    background: var(--color-navy-700);
+  }
+
+  .contact-form__status {
+    font-size: var(--fs-small);
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-sm);
+    color: var(--color-gray-technical);
+  }
+
+  @media (max-width: 560px) {
+    .contact-form__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

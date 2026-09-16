@@ -1,0 +1,22 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# environment variables
+.env
+.env.production
+
+# editor / OS
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+
+# logs
+npm-debug.log*
+
+# material de origem (contém dados de contato pessoais; mantido apenas localmente)
+*.pdf

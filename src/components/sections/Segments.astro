@@ -1,0 +1,46 @@
+---
+import Container from '../ui/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import SegmentCard from './SegmentCard.astro';
+import { segments } from '../../data/segments';
+---
+
+<section class="segments" aria-labelledby="segments-title">
+  <Container>
+    <SectionHeading
+      id="segments-title"
+      eyebrow="Segmentos de atuação"
+      title="Soluções para diferentes necessidades"
+      align="center"
+    />
+    <div class="segments__grid">
+      {segments.map((segment) => (
+        <SegmentCard segment={segment} />
+      ))}
+    </div>
+  </Container>
+</section>
+
+<style>
+  .segments {
+    padding-block: var(--space-2xl);
+    background: var(--color-surface-alt);
+  }
+
+  .segments :global(h2) {
+    margin: 0 auto;
+  }
+
+  .segments__grid {
+    margin-top: var(--space-xl);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+
+  @media (max-width: 800px) {
+    .segments__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

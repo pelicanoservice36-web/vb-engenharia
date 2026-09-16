@@ -1,0 +1,92 @@
+---
+import Icon from '../icons/Icon.astro';
+import type { IconName } from '../icons/paths';
+
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'ghost';
+  icon?: IconName;
+  class?: string;
+  type?: 'button' | 'submit';
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  icon,
+  class: className,
+  type = 'button',
+  ariaLabel,
+} = Astro.props;
+
+const Tag = href ? 'a' : 'button';
+const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
+---
+
+<Tag
+  class={classes}
+  href={href}
+  type={href ? undefined : type}
+  aria-label={ariaLabel}
+>
+  <span><slot /></span>
+  {icon && <Icon name={icon} size={18} />}
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2xs);
+    padding: 0.85rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: var(--fs-body);
+    line-height: 1;
+    text-decoration: none;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition: background-color var(--duration-base) var(--ease-standard),
+      border-color var(--duration-base) var(--ease-standard),
+      color var(--duration-base) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-standard);
+    min-height: 48px;
+  }
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  .btn--primary {
+    background: var(--color-blue-electric);
+    color: var(--color-white);
+  }
+
+  .btn--primary:hover {
+    background: var(--color-navy-700);
+  }
+
+  .btn--secondary {
+    background: transparent;
+    color: currentColor;
+    border-color: currentColor;
+  }
+
+  .btn--secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .btn--ghost {
+    background: transparent;
+    color: var(--color-blue-electric);
+    padding-inline: 0.25rem;
+    min-height: auto;
+  }
+
+  .btn--ghost:hover {
+    color: var(--color-navy-700);
+    text-decoration: underline;
+  }
+</style>

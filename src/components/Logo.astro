@@ -1,0 +1,27 @@
+---
+// Logotipo oficial da VB Engenharia (arquivo fornecido pela empresa em
+// Logo/VB Engenharia Logo Without Background.png), recortado sem a tag-line
+// e com a franja de cor do recorte de fundo removida via decontaminação de
+// alfa. O ícone (átomo) e o "V" se interligam no design original — não há
+// como isolar só o ícone sem cortar a arte, por isso o componente sempre usa
+// o lockup completo (ícone + "VB Engenharia").
+import { Image } from 'astro:assets';
+import logo from '../assets/images/logo/vb-engenharia-logo.png';
+
+export interface Props {
+  size?: number; // altura em px; a largura é derivada da proporção real do arquivo
+  class?: string;
+}
+
+const ASPECT_RATIO = logo.width / logo.height;
+const { size = 40, class: className } = Astro.props;
+const width = Math.round(size * ASPECT_RATIO);
+---
+
+<Image
+  src={logo}
+  alt="VB Engenharia"
+  width={width}
+  height={size}
+  class={className}
+/>

@@ -1,0 +1,76 @@
+---
+import { Image } from 'astro:assets';
+import Container from '../ui/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import { experiencePhotos } from '../../data/experience';
+---
+
+<section class="experience" id="experiencia" aria-labelledby="experience-title">
+  <Container>
+    <SectionHeading
+      id="experience-title"
+      eyebrow="Experiência"
+      title="Experiência que se transforma em solução"
+      subtitle="Um pouco das nossas atividades em campo: montagem de infraestrutura, instalações, laudos e testes em cabines, entre outros serviços executados junto aos nossos parceiros."
+      align="center"
+    />
+    <div class="experience__grid">
+      {experiencePhotos.map((photo) => (
+        <figure class="experience__item" data-reveal>
+          <Image src={photo.image} alt={photo.alt} width={640} height={640} />
+          <figcaption>{photo.caption}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </Container>
+</section>
+
+<style>
+  .experience {
+    padding-block: var(--space-2xl);
+    background: var(--color-surface-alt);
+  }
+
+  .experience__grid {
+    margin-top: var(--space-xl);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .experience__item {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    aspect-ratio: 1 / 1;
+  }
+
+  .experience__item :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-base) var(--ease-standard);
+  }
+
+  .experience__item:hover :global(img) {
+    transform: scale(1.04);
+  }
+
+  .experience__item figcaption {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    padding: var(--space-md);
+    background: linear-gradient(0deg, rgba(10, 31, 68, 0.88), rgba(10, 31, 68, 0));
+    color: var(--color-white);
+    font-weight: 600;
+    font-size: var(--fs-small);
+  }
+
+  @media (max-width: 640px) {
+    .experience__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

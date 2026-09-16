@@ -1,0 +1,43 @@
+---
+import Icon from './icons/Icon.astro';
+import { defaultWhatsAppContact, buildWhatsAppUrl } from '../data/contacts';
+
+const whatsAppUrl = buildWhatsAppUrl(defaultWhatsAppContact.phoneE164);
+---
+
+<div role="region" aria-label="Contato rápido">
+  <a
+    class="whatsapp-float"
+    href={whatsAppUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Falar com a VB Engenharia pelo WhatsApp"
+  >
+    <Icon name="chat" size={28} />
+  </a>
+</div>
+
+<style>
+  .whatsapp-float {
+    position: fixed;
+    right: var(--space-md);
+    bottom: var(--space-md);
+    z-index: 90;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-pill);
+    background: var(--color-blue-electric);
+    color: var(--color-white);
+    box-shadow: var(--shadow-lg);
+    transition: transform var(--duration-base) var(--ease-standard),
+      background-color var(--duration-base) var(--ease-standard);
+  }
+
+  .whatsapp-float:hover {
+    transform: translateY(-3px);
+    background: var(--color-navy-700);
+  }
+</style>

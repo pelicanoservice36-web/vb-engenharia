@@ -1,0 +1,59 @@
+---
+import Container from '../ui/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import ContactPersonCard from './ContactPersonCard.astro';
+import ContactForm from './ContactForm.astro';
+import { contacts } from '../../data/contacts';
+---
+
+<section class="contact" id="contato" aria-labelledby="contact-title">
+  <Container>
+    <div class="contact__inner">
+      <div class="contact__info">
+        <SectionHeading
+          id="contact-title"
+          eyebrow="Contato"
+          title="Fale com nossa equipe"
+          subtitle="Entre em contato diretamente com quem executa: CEO e engenheiros de execução."
+          tone="on-dark"
+        />
+        <div class="contact__cards">
+          {contacts.map((contact) => (
+            <ContactPersonCard contact={contact} />
+          ))}
+        </div>
+      </div>
+
+      <div class="contact__form">
+        <ContactForm />
+      </div>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .contact {
+    background: var(--color-navy);
+    padding-block: var(--space-2xl);
+  }
+
+  .contact__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  .contact__cards {
+    margin-top: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  @media (max-width: 900px) {
+    .contact__inner {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

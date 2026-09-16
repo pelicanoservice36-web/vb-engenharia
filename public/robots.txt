@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Atualize esta URL junto com "site" em astro.config.ts ao trocar o domínio.
+Sitemap: https://www.vbengenharia.com.br/sitemap-index.xml

@@ -1,0 +1,57 @@
+---
+import Container from '../ui/Container.astro';
+import HeroVisual from './HeroVisual.astro';
+import { about } from '../../data/company';
+---
+
+<section class="about" id="empresa" aria-labelledby="about-title">
+  <Container>
+    <div class="about__inner">
+      <div class="about__text">
+        <p class="eyebrow">Sobre a VB Engenharia</p>
+        <h2 id="about-title">{about.title}</h2>
+        {about.paragraphs.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </div>
+      <HeroVisual class="about__visual" />
+    </div>
+  </Container>
+</section>
+
+<style>
+  .about {
+    padding-block: var(--space-2xl);
+    background: var(--color-surface);
+  }
+
+  .about__inner {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: var(--space-xl);
+  }
+
+  .about__text h2 {
+    margin-block: var(--space-sm) var(--space-md);
+  }
+
+  .about__text p + p {
+    margin-top: var(--space-sm);
+  }
+
+  .about__text p {
+    color: var(--color-gray-technical);
+  }
+
+  @media (max-width: 900px) {
+    .about__inner {
+      grid-template-columns: 1fr;
+    }
+
+    :global(.about__visual) {
+      order: -1;
+      max-width: 280px;
+    }
+  }
+</style>

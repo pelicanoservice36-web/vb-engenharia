@@ -1,0 +1,86 @@
+---
+import Icon from '../icons/Icon.astro';
+import type { ServiceCategory } from '../../data/services';
+
+interface Props {
+  category: ServiceCategory;
+}
+const { category } = Astro.props;
+---
+
+<article class="service-card" data-reveal>
+  <div class="service-card__header">
+    <div class="service-card__icon">
+      <Icon name={category.icon} size={24} />
+    </div>
+    <h3>{category.title}</h3>
+  </div>
+  <ul class="service-card__list">
+    {category.items.map((item) => (
+      <li>
+        <Icon name="check" size={16} class="service-card__check" />
+        <span>{item}</span>
+      </li>
+    ))}
+  </ul>
+</article>
+
+<style>
+  .service-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    height: 100%;
+    transition: box-shadow var(--duration-base) var(--ease-standard),
+      border-color var(--duration-base) var(--ease-standard);
+  }
+
+  .service-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-blue-electric);
+  }
+
+  .service-card__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+
+  .service-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: var(--radius-md);
+    background: var(--color-surface-alt);
+    color: var(--color-blue-electric);
+  }
+
+  .service-card__header h3 {
+    font-size: 1.15rem;
+  }
+
+  .service-card__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .service-card__list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2xs);
+    font-size: var(--fs-small);
+    color: var(--color-gray-technical);
+  }
+
+  .service-card__list :global(.service-card__check) {
+    color: var(--color-blue-electric);
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+</style>

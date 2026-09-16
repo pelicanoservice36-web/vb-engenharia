@@ -1,0 +1,106 @@
+---
+import Container from '../ui/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Icon from '../icons/Icon.astro';
+import { missionVisionValues } from '../../data/company';
+---
+
+<section class="mvv" aria-labelledby="mvv-title">
+  <Container>
+    <SectionHeading
+      id="mvv-title"
+      eyebrow="Nosso lema"
+      title="Missão, visão e valores"
+      align="center"
+    />
+    <div class="mvv__grid">
+      {missionVisionValues.map((item) => (
+        <article class="mvv__card" data-reveal>
+          <div class="mvv__icon">
+            <Icon name={item.icon} size={26} />
+          </div>
+          <h3>{item.title}</h3>
+          {Array.isArray(item.content) ? (
+            <ul class="mvv__values">
+              {item.content.map((value) => (
+                <li>
+                  <Icon name="check" size={14} />
+                  <span>{value}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>{item.content}</p>
+          )}
+        </article>
+      ))}
+    </div>
+  </Container>
+</section>
+
+<style>
+  .mvv {
+    padding-block: var(--space-2xl);
+    background: var(--color-surface);
+  }
+
+  .mvv__grid {
+    margin-top: var(--space-xl);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+
+  .mvv__card {
+    background: var(--color-surface-alt);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    height: 100%;
+  }
+
+  .mvv__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-md);
+    background: var(--color-navy);
+    color: var(--color-orange-light);
+    margin-bottom: var(--space-md);
+  }
+
+  .mvv__card h3 {
+    margin-bottom: var(--space-sm);
+  }
+
+  .mvv__card p {
+    color: var(--color-gray-technical);
+  }
+
+  .mvv__values {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+  }
+
+  .mvv__values li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2xs);
+    font-size: var(--fs-small);
+    color: var(--color-gray-technical);
+  }
+
+  .mvv__values :global(svg) {
+    color: var(--color-blue-electric);
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+  }
+
+  @media (max-width: 900px) {
+    .mvv__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

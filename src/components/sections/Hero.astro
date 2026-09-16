@@ -1,0 +1,80 @@
+---
+import Container from '../ui/Container.astro';
+import Button from '../ui/Button.astro';
+import HeroVisual from './HeroVisual.astro';
+import { hero } from '../../data/hero';
+---
+
+<section class="hero" id="inicio" aria-label="Apresentação">
+  <Container>
+    <div class="hero__inner">
+      <div class="hero__content">
+        <p class="eyebrow">{hero.eyebrow}</p>
+        <h1>{hero.title}</h1>
+        <p class="hero__subtitle">{hero.subtitle}</p>
+        <div class="hero__ctas">
+          <Button href={hero.primaryCta.href} variant="primary">{hero.primaryCta.label}</Button>
+          <Button href={hero.secondaryCta.href} variant="secondary">{hero.secondaryCta.label}</Button>
+        </div>
+      </div>
+      <HeroVisual class="hero__visual" />
+    </div>
+  </Container>
+</section>
+
+<style>
+  .hero {
+    background: linear-gradient(180deg, var(--color-navy) 0%, #0d264f 100%);
+    color: var(--color-white);
+    padding-block: var(--space-2xl) var(--space-xl);
+    overflow: clip;
+  }
+
+  .hero__inner {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: var(--space-xl);
+  }
+
+  .hero .eyebrow {
+    color: var(--color-orange);
+  }
+
+  .hero__content h1 {
+    color: var(--color-white);
+    margin-block: var(--space-sm);
+  }
+
+  .hero__subtitle {
+    font-size: var(--fs-lead);
+    color: var(--color-gray-on-navy);
+    max-width: 52ch;
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  @media (max-width: 900px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    .hero__subtitle {
+      margin-inline: auto;
+    }
+
+    .hero__ctas {
+      justify-content: center;
+    }
+
+    :global(.hero__visual) {
+      max-width: 320px;
+    }
+  }
+</style>

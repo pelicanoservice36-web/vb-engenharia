@@ -1,0 +1,55 @@
+---
+import Icon from '../icons/Icon.astro';
+import type { Segment } from '../../data/segments';
+
+interface Props {
+  segment: Segment;
+}
+const { segment } = Astro.props;
+---
+
+<article class="segment-card" data-reveal>
+  <div class="segment-card__icon">
+    <Icon name={segment.icon} size={28} />
+  </div>
+  <h3>{segment.title}</h3>
+  <p>{segment.description}</p>
+</article>
+
+<style>
+  .segment-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    transition: transform var(--duration-base) var(--ease-standard),
+      box-shadow var(--duration-base) var(--ease-standard),
+      border-color var(--duration-base) var(--ease-standard);
+  }
+
+  .segment-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-blue-electric);
+  }
+
+  .segment-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
+    background: var(--color-navy);
+    color: var(--color-white);
+    margin-bottom: var(--space-md);
+  }
+
+  .segment-card h3 {
+    margin-bottom: var(--space-2xs);
+  }
+
+  .segment-card p {
+    color: var(--color-gray-technical);
+  }
+</style>

@@ -1,0 +1,113 @@
+---
+import Logo from '../Logo.astro';
+import Container from '../ui/Container.astro';
+import { navLinks } from '../../data/nav';
+import { defaultWhatsAppContact } from '../../data/contacts';
+
+const year = new Date().getFullYear();
+const ceo = defaultWhatsAppContact;
+---
+
+<footer class="footer">
+  <Container>
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <Logo size={46} />
+        <p>Engenharia Elétrica — Industrial, Comercial e Predial</p>
+      </div>
+
+      <nav class="footer__nav" aria-label="Links rápidos">
+        <p class="footer__heading">Navegação</p>
+        <ul>
+          {navLinks.map((link) => (
+            <li><a href={link.href}>{link.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="footer__contact">
+        <p class="footer__heading">Contato</p>
+        <p>{ceo.name}</p>
+        <p><a href={`tel:+${ceo.phoneE164}`}>{ceo.phoneDisplay}</a></p>
+        <p><a href={`mailto:${ceo.email}`}>{ceo.email}</a></p>
+      </div>
+    </div>
+  </Container>
+
+  <div class="footer__bottom">
+    <Container>
+      <p>&copy; {year} VB Engenharia. Todos os direitos reservados.</p>
+    </Container>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: #071630;
+    color: var(--color-gray-on-navy);
+  }
+
+  .footer__inner {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: var(--space-xl);
+    padding-block: var(--space-xl);
+  }
+
+  .footer__brand p {
+    margin-top: var(--space-sm);
+    font-size: var(--fs-small);
+    max-width: 32ch;
+  }
+
+  .footer__heading {
+    color: var(--color-white);
+    font-weight: 700;
+    font-size: var(--fs-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-sm);
+  }
+
+  .footer__nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+  }
+
+  .footer__nav a,
+  .footer__contact a {
+    text-decoration: none;
+    color: var(--color-gray-on-navy);
+    font-size: var(--fs-small);
+  }
+
+  .footer__nav a:hover,
+  .footer__contact a:hover {
+    color: var(--color-white);
+  }
+
+  .footer__contact p {
+    font-size: var(--fs-small);
+    margin-bottom: var(--space-3xs);
+  }
+
+  .footer__bottom {
+    border-top: 1px solid var(--color-border-on-navy);
+    padding-block: var(--space-md);
+  }
+
+  .footer__bottom p {
+    font-size: var(--fs-small);
+    text-align: center;
+  }
+
+  @media (max-width: 700px) {
+    .footer__inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+  }
+</style>

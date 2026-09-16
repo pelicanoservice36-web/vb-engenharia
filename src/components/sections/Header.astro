@@ -1,0 +1,219 @@
+---
+import Logo from '../Logo.astro';
+import Icon from '../icons/Icon.astro';
+import Container from '../ui/Container.astro';
+import Button from '../ui/Button.astro';
+import { navLinks, headerCta } from '../../data/nav';
+import { defaultWhatsAppContact, buildWhatsAppUrl } from '../../data/contacts';
+
+const whatsAppUrl = buildWhatsAppUrl(defaultWhatsAppContact.phoneE164);
+---
+
+<header class="site-header" id="site-header" data-header>
+  <Container>
+    <div class="site-header__inner">
+      <a href="#inicio" class="site-header__brand" aria-label="VB Engenharia — página inicial">
+        <Logo size={52} />
+      </a>
+
+      <nav class="site-header__nav" aria-label="Navegação principal">
+        <ul>
+          {navLinks.map((link) => (
+            <li><a href={link.href}>{link.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="site-header__actions">
+        <a
+          class="site-header__whatsapp"
+          href={whatsAppUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Falar pelo WhatsApp"
+        >
+          <Icon name="chat" size={22} />
+        </a>
+        <div class="site-header__cta">
+          <Button href={headerCta.href} variant="primary">{headerCta.label}</Button>
+        </div>
+        <button
+          class="site-header__menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="mobile-nav"
+          data-menu-toggle
+        >
+          <span class="sr-only">Abrir menu</span>
+          <Icon name="menu" size={26} class="icon-open" />
+          <Icon name="close" size={26} class="icon-close" />
+        </button>
+      </div>
+    </div>
+  </Container>
+
+  <div class="mobile-nav" id="mobile-nav" data-mobile-nav hidden>
+    <nav aria-label="Navegação mobile">
+      <ul>
+        {navLinks.map((link) => (
+          <li><a href={link.href} data-mobile-link>{link.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div class="mobile-nav__actions">
+      <Button href={headerCta.href} variant="primary" class="mobile-nav__cta">{headerCta.label}</Button>
+      <a class="mobile-nav__whatsapp" href={whatsAppUrl} target="_blank" rel="noopener noreferrer">
+        <Icon name="chat" size={20} />
+        Falar pelo WhatsApp
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--color-navy);
+    transition: box-shadow var(--duration-base) var(--ease-standard);
+    color: var(--color-white);
+  }
+
+  .site-header[data-scrolled] {
+    box-shadow: var(--shadow-md);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    height: var(--header-height);
+  }
+
+  .site-header__brand {
+    display: flex;
+    align-items: center;
+  }
+
+  .site-header__nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: var(--space-md);
+  }
+
+  .site-header__nav a {
+    text-decoration: none;
+    font-weight: 500;
+    font-size: var(--fs-small);
+    color: var(--color-gray-on-navy);
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+
+  .site-header__nav a:hover {
+    color: var(--color-white);
+  }
+
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .site-header__whatsapp {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-white);
+  }
+
+  .site-header__menu-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    color: var(--color-white);
+    cursor: pointer;
+  }
+
+  .site-header__menu-toggle :global(.icon-close) {
+    display: none;
+  }
+
+  .site-header__menu-toggle[aria-expanded='true'] :global(.icon-open) {
+    display: none;
+  }
+
+  .site-header__menu-toggle[aria-expanded='true'] :global(.icon-close) {
+    display: block;
+  }
+
+  .mobile-nav {
+    background: var(--color-navy);
+    border-top: 1px solid var(--color-border-on-navy);
+    padding: var(--space-md) var(--container-pad) var(--space-lg);
+  }
+
+  .mobile-nav[hidden] {
+    display: none;
+  }
+
+  .mobile-nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+
+  .mobile-nav a {
+    text-decoration: none;
+    font-weight: 500;
+    color: var(--color-white);
+    font-size: var(--fs-lead);
+  }
+
+  .mobile-nav__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .mobile-nav__whatsapp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2xs);
+    color: var(--color-white);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.75rem;
+    border: 1.5px solid var(--color-border-on-navy);
+    border-radius: var(--radius-md);
+  }
+
+  @media (max-width: 900px) {
+    .site-header__nav {
+      display: none;
+    }
+
+    .site-header__cta {
+      display: none;
+    }
+
+    .site-header__whatsapp,
+    .site-header__menu-toggle {
+      display: inline-flex;
+    }
+  }
+</style>

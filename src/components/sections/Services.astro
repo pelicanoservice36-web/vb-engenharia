@@ -1,0 +1,43 @@
+---
+import Container from '../ui/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import ServiceCard from './ServiceCard.astro';
+import { serviceCategories } from '../../data/services';
+---
+
+<section class="services" id="servicos" aria-labelledby="services-title">
+  <Container>
+    <SectionHeading
+      id="services-title"
+      eyebrow="Serviços"
+      title="Soluções completas em engenharia elétrica"
+      subtitle="Da elaboração do projeto à execução, manutenção e adequação das instalações."
+      align="center"
+    />
+    <div class="services__grid">
+      {serviceCategories.map((category) => (
+        <ServiceCard category={category} />
+      ))}
+    </div>
+  </Container>
+</section>
+
+<style>
+  .services {
+    padding-block: var(--space-2xl);
+    background: var(--color-surface);
+  }
+
+  .services__grid {
+    margin-top: var(--space-xl);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-md);
+  }
+
+  @media (max-width: 640px) {
+    .services__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

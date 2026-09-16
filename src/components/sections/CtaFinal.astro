@@ -1,0 +1,58 @@
+---
+import Container from '../ui/Container.astro';
+import Button from '../ui/Button.astro';
+import { ctaFinal } from '../../data/hero';
+import { defaultWhatsAppContact, buildWhatsAppUrl } from '../../data/contacts';
+
+const whatsAppUrl = buildWhatsAppUrl(defaultWhatsAppContact.phoneE164);
+---
+
+<section class="cta-final" aria-labelledby="cta-final-title">
+  <Container>
+    <div class="cta-final__inner">
+      <h2 id="cta-final-title">{ctaFinal.title}</h2>
+      <p>{ctaFinal.description}</p>
+      <div class="cta-final__actions">
+        <Button href={ctaFinal.primaryCta.href} variant="primary">{ctaFinal.primaryCta.label}</Button>
+        <Button href={whatsAppUrl} variant="secondary" icon="chat">
+          {ctaFinal.secondaryCtaLabel}
+        </Button>
+      </div>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .cta-final {
+    background: var(--color-navy);
+    color: var(--color-white);
+    padding-block: var(--space-2xl);
+    text-align: center;
+  }
+
+  .cta-final__inner {
+    max-width: 42rem;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .cta-final h2 {
+    color: var(--color-white);
+  }
+
+  .cta-final p {
+    color: var(--color-gray-on-navy);
+    font-size: var(--fs-lead);
+    margin-bottom: var(--space-sm);
+  }
+
+  .cta-final__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-sm);
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+interface Props {
+  id?: string;
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  align?: 'left' | 'center';
+  tone?: 'on-light' | 'on-dark';
+  class?: string;
+}
+
+const { id, eyebrow, title, subtitle, align = 'left', tone = 'on-light', class: className } = Astro.props;
+---
+
+<div class:list={['heading', `heading--${align}`, `heading--${tone}`, className]}>
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <h2 id={id}>{title}</h2>
+  {subtitle && <p class="subtitle">{subtitle}</p>}
+</div>
+
+<style>
+  .heading {
+    max-width: 62ch;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .heading--center {
+    max-width: 44rem;
+    margin-inline: auto;
+    text-align: center;
+    align-items: center;
+  }
+
+  .heading--on-dark h2 {
+    color: var(--color-white);
+  }
+
+  .heading--on-dark .eyebrow {
+    color: var(--color-orange);
+  }
+
+  .subtitle {
+    font-size: var(--fs-lead);
+    color: var(--color-gray-technical);
+  }
+
+  .heading--on-dark .subtitle {
+    color: var(--color-gray-on-navy);
+  }
+</style>

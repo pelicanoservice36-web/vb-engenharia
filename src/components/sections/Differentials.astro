@@ -1,0 +1,49 @@
+---
+import Container from '../ui/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import DifferentialItem from './DifferentialItem.astro';
+import { differentials } from '../../data/company';
+---
+
+<section class="differentials" id="diferenciais" aria-labelledby="differentials-title">
+  <Container>
+    <SectionHeading
+      id="differentials-title"
+      eyebrow="Diferenciais"
+      title="Por que trabalhar com a VB Engenharia?"
+      align="center"
+      tone="on-dark"
+    />
+    <div class="differentials__grid">
+      {differentials.map((differential) => (
+        <DifferentialItem differential={differential} />
+      ))}
+    </div>
+  </Container>
+</section>
+
+<style>
+  .differentials {
+    padding-block: var(--space-2xl);
+    background: var(--color-navy);
+  }
+
+  .differentials__grid {
+    margin-top: var(--space-xl);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg) var(--space-md);
+  }
+
+  @media (max-width: 900px) {
+    .differentials__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .differentials__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

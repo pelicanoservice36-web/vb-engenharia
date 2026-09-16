@@ -1,0 +1,74 @@
+---
+import Icon from '../icons/Icon.astro';
+import { buildWhatsAppUrl, type Contact } from '../../data/contacts';
+
+interface Props {
+  contact: Contact;
+}
+const { contact } = Astro.props;
+const whatsAppUrl = buildWhatsAppUrl(contact.phoneE164);
+---
+
+<article class="contact-card">
+  <h3>{contact.name}</h3>
+  <p class="contact-card__role">{contact.role}</p>
+  <div class="contact-card__actions">
+    <a href={whatsAppUrl} target="_blank" rel="noopener noreferrer" aria-label={`Falar com ${contact.name} pelo WhatsApp`}>
+      <Icon name="chat" size={18} />
+      WhatsApp
+    </a>
+    <a href={`tel:+${contact.phoneE164}`} aria-label={`Ligar para ${contact.name}`}>
+      <Icon name="phone" size={18} />
+      {contact.phoneDisplay}
+    </a>
+    <a href={`mailto:${contact.email}`} aria-label={`Enviar e-mail para ${contact.name}`}>
+      <Icon name="mail" size={18} />
+      {contact.email}
+    </a>
+  </div>
+</article>
+
+<style>
+  .contact-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--color-border-on-navy);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+  }
+
+  .contact-card h3 {
+    color: var(--color-white);
+  }
+
+  .contact-card__role {
+    color: var(--color-orange-light);
+    font-size: var(--fs-small);
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+  }
+
+  .contact-card__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .contact-card__actions a {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    color: var(--color-gray-on-navy);
+    text-decoration: none;
+    font-size: var(--fs-small);
+    word-break: break-word;
+  }
+
+  .contact-card__actions a:hover {
+    color: var(--color-white);
+  }
+
+  .contact-card__actions :global(svg) {
+    flex-shrink: 0;
+    color: var(--color-blue-electric-light);
+  }
+</style>

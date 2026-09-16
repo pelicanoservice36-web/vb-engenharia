@@ -1,0 +1,48 @@
+---
+import Container from '../ui/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import ClientLogo from './ClientLogo.astro';
+import { clients } from '../../data/clients';
+---
+
+<section class="clients" aria-labelledby="clients-title">
+  <Container>
+    <SectionHeading
+      id="clients-title"
+      eyebrow="Referências"
+      title="Clientes e parceiros"
+      align="center"
+    />
+    <div class="clients__grid">
+      {clients.map((client) => (
+        <ClientLogo client={client} />
+      ))}
+    </div>
+  </Container>
+</section>
+
+<style>
+  .clients {
+    padding-block: var(--space-2xl);
+    background: var(--color-surface-alt);
+  }
+
+  .clients__grid {
+    margin-top: var(--space-xl);
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-md);
+  }
+
+  @media (max-width: 900px) {
+    .clients__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .clients__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

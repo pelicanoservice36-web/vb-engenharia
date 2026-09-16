@@ -1,0 +1,81 @@
+---
+import Container from '../ui/Container.astro';
+import { trustItems } from '../../data/company';
+---
+
+<section class="trust-bar" aria-label="Diferenciais em destaque">
+  <Container>
+    <ul class="trust-bar__grid">
+      {trustItems.map((item) => (
+        <li>
+          <p class="trust-bar__value">{item.value}</p>
+          <p class="trust-bar__label">{item.label}</p>
+        </li>
+      ))}
+    </ul>
+  </Container>
+</section>
+
+<style>
+  .trust-bar {
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding-block: var(--space-lg);
+  }
+
+  .trust-bar__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-md);
+    text-align: center;
+  }
+
+  .trust-bar__grid li {
+    padding-inline: var(--space-xs);
+    border-left: 2px solid var(--color-border);
+  }
+
+  .trust-bar__grid li:first-child {
+    border-left: none;
+  }
+
+  .trust-bar__value {
+    font-weight: 700;
+    font-size: var(--fs-h3);
+    color: var(--color-navy);
+    margin-bottom: var(--space-3xs);
+  }
+
+  .trust-bar__label {
+    font-size: var(--fs-small);
+    color: var(--color-gray-technical);
+  }
+
+  @media (max-width: 800px) {
+    .trust-bar__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-lg) var(--space-md);
+    }
+
+    .trust-bar__grid li:nth-child(3) {
+      border-left: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .trust-bar__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .trust-bar__grid li {
+      border-left: none;
+      border-top: 2px solid var(--color-border);
+      padding-block-start: var(--space-md);
+    }
+
+    .trust-bar__grid li:first-child {
+      border-top: none;
+      padding-block-start: 0;
+    }
+  }
+</style>
