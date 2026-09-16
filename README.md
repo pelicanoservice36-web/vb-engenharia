@@ -103,7 +103,11 @@ Nenhum ID de Google Analytics/GTM/Search Console foi adicionado (evitar IDs fict
 - **Google Analytics 4 / GTM**: adicione o snippet oficial em `src/layouts/BaseLayout.astro`, dentro de `<head>`.
 - **Google Search Console**: verifique a propriedade pela tag HTML (mesma ideia) ou via DNS, e submeta `https://SEU-DOMINIO/sitemap-index.xml`.
 
-## Deploy no Cloudflare Pages
+## Deploy no Cloudflare
+
+O projeto está pronto tanto para **Cloudflare Pages** (clássico) quanto para **Cloudflare Workers com Static Assets** (o fluxo unificado mais recente do dashboard da Cloudflare, que gera URLs `*.workers.dev`).
+
+### Cloudflare Pages
 
 1. Suba o repositório no GitHub.
 2. No Cloudflare Pages, conecte o repositório.
@@ -112,7 +116,24 @@ Nenhum ID de Google Analytics/GTM/Search Console foi adicionado (evitar IDs fict
    - **Output directory:** `dist`
 4. Nenhuma variável de ambiente é necessária (site 100% estático).
 
-Todo push na branch de produção gera um novo deploy automaticamente.
+### Cloudflare Workers (Static Assets)
+
+Se o dashboard te levar para o fluxo de **Workers** em vez de Pages (URL final `*.workers.dev`), o arquivo `wrangler.jsonc` na raiz do projeto já configura o Worker para servir a pasta `dist/` como assets estáticos puros, sem nenhuma lógica de servidor:
+
+```jsonc
+{
+  "name": "vb-engenharia",
+  "compatibility_date": "2026-09-01",
+  "assets": { "directory": "./dist" }
+}
+```
+
+Isso é necessário porque, sem esse arquivo, o Cloudflare pode presumir que um projeto Astro precisa rodar em modo servidor (SSR) — o que quebra as imagens otimizadas por `astro:assets`, já que elas passam a depender de um endpoint `/_image` em tempo de execução que não existe num deploy estático. Configure o build/deploy como:
+
+- **Build command:** `npm run build`
+- **Deploy command:** `npx wrangler deploy`
+
+Todo push na branch de produção gera um novo deploy automaticamente, nos dois fluxos.
 
 ## Observação sobre o PDF de origem
 

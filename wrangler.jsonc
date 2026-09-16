@@ -1,0 +1,14 @@
+{
+  // Este projeto é um site 100% estático (astro.config.ts tem output: 'static',
+  // sem adapter). Este arquivo diz ao Cloudflare Workers para servir a pasta
+  // `dist/` gerada pelo `npm run build` como arquivos estáticos puros — sem
+  // isso, o deploy no Workers pode assumir modo servidor (SSR) por padrão
+  // para projetos Astro, o que quebra as imagens otimizadas por astro:assets
+  // (elas passam a depender de um endpoint /_image em tempo de execução que
+  // não existe num deploy estático).
+  "name": "vb-engenharia",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./dist"
+  }
+}
