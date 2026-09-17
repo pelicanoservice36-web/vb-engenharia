@@ -6,10 +6,17 @@ interface Props {
   client: Client;
 }
 const { client } = Astro.props;
+
+// Largura calculada a partir da proporção real de cada logo (em vez de
+// forçar um box width/height fixo) — evita que o Astro precise recortar
+// logos com proporções muito diferentes entre si (ex.: "GrupoRB", bem mais
+// largo que os demais, aparecia cortado quando width/height eram fixos).
+const height = 96;
+const width = Math.round(height * (client.logo.width / client.logo.height));
 ---
 
 <div class="client-logo">
-  <Image src={client.logo} alt={client.name} width={160} height={80} />
+  <Image src={client.logo} alt={client.name} width={width} height={height} />
 </div>
 
 <style>
@@ -17,24 +24,17 @@ const { client } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--space-md);
+    aspect-ratio: 2.2 / 1;
+    padding: var(--space-sm);
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
   }
 
   .client-logo :global(img) {
-    max-height: 48px;
+    max-width: 100%;
+    max-height: 100%;
     width: auto;
-    object-fit: contain;
-    filter: grayscale(1);
-    opacity: 0.75;
-    transition: filter var(--duration-base) var(--ease-standard),
-      opacity var(--duration-base) var(--ease-standard);
-  }
-
-  .client-logo:hover :global(img) {
-    filter: grayscale(0);
-    opacity: 1;
+    height: auto;
   }
 </style>
