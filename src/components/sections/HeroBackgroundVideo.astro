@@ -1,0 +1,45 @@
+---
+// Vídeo institucional de fundo do Hero (modelo replicado de
+// clinica-samya.pelicanoservice36.workers.dev, a pedido do cliente): vídeo
+// full-bleed atrás do texto, com gradientes de escurecimento por cima (ver
+// Hero.astro). Componente dedicado (em vez de reaproveitar HeroVisual.astro,
+// que Impact.astro e About.astro também usam para o motivo SVG de circuito)
+// para não afetar essas outras seções com posicionamento absoluto.
+// Vídeo original fornecido pela empresa (Video/Video-VB-Engenharia.mp4),
+// recodificado para web em public/videos/vb-engenharia-hero.mp4 (sem áudio,
+// já que toca mudo; ver hero-video.ts para a lógica de autoplay). Sem
+// JavaScript, ou com prefers-reduced-motion, o <video> fica parado no poster
+// (primeiro frame) — nunca reproduz automaticamente por conta própria.
+import { getImage } from 'astro:assets';
+import posterSrc from '../../assets/images/hero/vb-engenharia-hero-poster.jpg';
+
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+const poster = await getImage({ src: posterSrc, width: 1600, format: 'jpg' });
+---
+
+<video
+  class:list={['hero-bg-video', className]}
+  data-hero-video
+  src="/videos/vb-engenharia-hero.mp4"
+  poster={poster.src}
+  muted
+  loop
+  playsinline
+  preload="metadata"
+  aria-hidden="true"
+></video>
+
+<style>
+  .hero-bg-video {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 35%;
+  }
+</style>

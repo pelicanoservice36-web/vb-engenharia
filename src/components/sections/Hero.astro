@@ -1,44 +1,65 @@
 ---
 import Container from '../ui/Container.astro';
 import Button from '../ui/Button.astro';
-import HeroVisual from './HeroVisual.astro';
+import HeroBackgroundVideo from './HeroBackgroundVideo.astro';
 import { hero } from '../../data/hero';
 ---
 
 <section class="hero" id="inicio" aria-label="Apresentação">
+  <HeroBackgroundVideo class="hero__video" />
+  <div class="hero__overlay hero__overlay--x" aria-hidden="true"></div>
+  <div class="hero__overlay hero__overlay--y" aria-hidden="true"></div>
   <Container>
-    <div class="hero__inner">
-      <div class="hero__content">
-        <p class="eyebrow">{hero.eyebrow}</p>
-        <h1>{hero.title}</h1>
-        <p class="hero__subtitle">{hero.subtitle}</p>
-        <div class="hero__ctas">
-          <Button href={hero.primaryCta.href} variant="primary">{hero.primaryCta.label}</Button>
-          <Button href={hero.secondaryCta.href} variant="secondary">{hero.secondaryCta.label} ↓</Button>
-        </div>
+    <div class="hero__content">
+      <p class="eyebrow">{hero.eyebrow}</p>
+      <h1>{hero.title}</h1>
+      <p class="hero__subtitle">{hero.subtitle}</p>
+      <div class="hero__ctas">
+        <Button href={hero.primaryCta.href} variant="primary">{hero.primaryCta.label}</Button>
+        <Button href={hero.secondaryCta.href} variant="secondary">{hero.secondaryCta.label} ↓</Button>
       </div>
-      <HeroVisual class="hero__visual" />
     </div>
   </Container>
 </section>
 
 <style>
   .hero {
-    background: linear-gradient(180deg, var(--color-navy) 0%, #0d264f 100%);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--color-navy);
     color: var(--color-white);
     padding-block: var(--space-2xl) var(--space-xl);
     min-height: 82vh;
     display: flex;
     align-items: center;
-    overflow: clip;
   }
 
-  .hero__inner {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    align-items: center;
-    gap: var(--space-xl);
+  /* Escurece mais à esquerda (onde o texto fica) e menos à direita (onde o
+     vídeo fica mais visível) — mesmo modelo de clinica-samya.pelicanoservice36.workers.dev. */
+  .hero__overlay--x {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      to right,
+      rgba(10, 31, 68, 0.94) 0%,
+      rgba(10, 31, 68, 0.72) 45%,
+      rgba(10, 31, 68, 0.32) 100%
+    );
+  }
+
+  .hero__overlay--y {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(to top, rgba(10, 31, 68, 0.7) 0%, rgba(10, 31, 68, 0) 55%, rgba(10, 31, 68, 0) 100%);
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    max-width: 42rem;
   }
 
   .hero .eyebrow {
@@ -61,24 +82,5 @@ import { hero } from '../../data/hero';
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-sm);
-  }
-
-  @media (max-width: 900px) {
-    .hero__inner {
-      grid-template-columns: 1fr;
-      text-align: center;
-    }
-
-    .hero__subtitle {
-      margin-inline: auto;
-    }
-
-    .hero__ctas {
-      justify-content: center;
-    }
-
-    :global(.hero__visual) {
-      max-width: 320px;
-    }
   }
 </style>

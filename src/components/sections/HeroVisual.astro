@@ -1,51 +1,127 @@
 ---
-// Vídeo institucional fornecido pela empresa (Video/Video-VB-Engenharia.mp4),
-// recodificado para web (public/videos/vb-engenharia-hero.mp4 — sem áudio,
-// já que toca mudo; ver hero-video.ts para a lógica de autoplay). Sem
-// JavaScript, ou com prefers-reduced-motion, o <video> fica parado no poster
-// (primeiro frame) — nunca reproduz automaticamente por conta própria.
-import { getImage } from 'astro:assets';
-import posterSrc from '../../assets/images/hero/vb-engenharia-hero-poster.jpg';
-
+// Visual original em SVG/CSS (nenhuma foto) — um motivo geométrico de
+// "diagrama de circuito" em navy + azul elétrico, reforçando o tema de
+// engenharia elétrica sem depender de banco de imagens. Camadas extras
+// (anel externo graduado, marcas de escala, rótulo de coordenada) dão
+// sensação de precisão/instrumentação técnica sem virar decoração.
+// Reusado por Impact.astro e About.astro além do próprio Hero (o vídeo de
+// fundo do Hero vive num componente separado, HeroBackgroundVideo.astro,
+// justamente para não afetar essas outras seções).
 interface Props {
   class?: string;
 }
 const { class: className } = Astro.props;
-const poster = await getImage({ src: posterSrc, width: 960, format: 'jpg' });
+const uid = Math.random().toString(36).slice(2, 9);
+const ticks = Array.from({ length: 24 }, (_, i) => i * 15);
 ---
 
 <div class:list={['hero-visual', className]} aria-hidden="true">
-  <video
-    class="hero-visual__video"
-    data-hero-video
-    src="/videos/vb-engenharia-hero.mp4"
-    poster={poster.src}
-    muted
-    loop
-    playsinline
-    preload="metadata"
-  ></video>
+  <svg viewBox="0 0 560 560" xmlns="http://www.w3.org/2000/svg" role="presentation">
+    <defs>
+      <radialGradient id={`glow-${uid}`} cx="50%" cy="42%" r="60%">
+        <stop offset="0%" stop-color="#1e5fd9" stop-opacity="0.35" />
+        <stop offset="100%" stop-color="#1e5fd9" stop-opacity="0" />
+      </radialGradient>
+      <pattern id={`grid-${uid}`} width="40" height="40" patternUnits="userSpaceOnUse">
+        <circle cx="1" cy="1" r="1.4" fill="#5fa8ff" opacity="0.22" />
+      </pattern>
+    </defs>
+
+    <circle cx="280" cy="235" r="230" fill={`url(#glow-${uid})`} />
+    <rect x="0" y="0" width="560" height="560" fill={`url(#grid-${uid})`} />
+
+    <!-- anel graduado externo — sensação de instrumento de precisão.
+         Coordenadas absolutas (centro 280,280) em vez de <g transform>,
+         porque a animação CSS de rotação substitui (não soma) qualquer
+         transform via atributo SVG. -->
+    <g class="dial">
+      <circle cx="280" cy="280" r="255" fill="none" stroke="#2f4a7a" stroke-width="1" stroke-dasharray="1 7" opacity="0.6" />
+      {ticks.map((deg) => (
+        <line x1="280" y1="25" x2="280" y2={deg % 90 === 0 ? 36 : 31} stroke="#5fa8ff" stroke-width="1.5"
+          opacity="0.5" transform={`rotate(${deg} 280 280)`} />
+      ))}
+      <text x="280" y="18" text-anchor="middle" font-size="9" letter-spacing="2" fill="#5fa8ff" opacity="0.55"
+        font-family="monospace">VB · 002014</text>
+    </g>
+
+    <g class="circuit-lines" fill="none" stroke="#5fa8ff" stroke-width="2" stroke-linecap="round" opacity="0.55">
+      <path d="M60 120 H200 V210 H280" />
+      <path d="M500 90 H360 V180 H300" />
+      <path d="M70 430 H180 V330 H260" />
+      <path d="M490 460 H380 V360 H320" />
+      <path d="M280 60 V150" />
+      <path d="M280 410 V500" />
+    </g>
+
+    <g class="circuit-nodes">
+      <circle cx="60" cy="120" r="5" fill="#5fa8ff" />
+      <circle cx="500" cy="90" r="5" fill="#5fa8ff" />
+      <circle cx="70" cy="430" r="5" fill="#5fa8ff" />
+      <circle cx="490" cy="460" r="5" fill="#5fa8ff" />
+      <circle cx="280" cy="60" r="5" fill="#5fa8ff" />
+      <circle cx="280" cy="500" r="5" fill="#5fa8ff" />
+      <circle class="pulse" cx="280" cy="180" r="7" fill="#dc670b" />
+      <circle class="pulse pulse--delay" cx="280" cy="330" r="7" fill="#dc670b" />
+    </g>
+
+    <g transform="translate(200 175)" fill="none" stroke="#f4f6f9" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+      <rect x="0" y="0" width="160" height="190" rx="10" fill="#0f2a5c" stroke="#2f4a7a" />
+      <line x1="20" y1="34" x2="140" y2="34" stroke="#2f4a7a" />
+      <rect x="20" y="52" width="46" height="26" rx="4" />
+      <rect x="94" y="52" width="46" height="26" rx="4" />
+      <rect x="20" y="92" width="46" height="26" rx="4" stroke="#dc670b" />
+      <rect x="94" y="92" width="46" height="26" rx="4" />
+      <rect x="20" y="132" width="120" height="26" rx="4" />
+      <circle cx="30" cy="20" r="3.2" fill="#5fa8ff" stroke="none" />
+      <circle cx="48" cy="20" r="3.2" fill="#5fa8ff" stroke="none" />
+      <circle cx="66" cy="20" r="3.2" fill="#dc670b" stroke="none" />
+    </g>
+  </svg>
 </div>
 
 <style>
   .hero-visual {
-    position: relative;
     width: 100%;
     max-width: 480px;
     margin-inline: auto;
-    aspect-ratio: 1 / 1;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
-    border: 1px solid var(--color-border-on-navy);
-    background: var(--color-navy);
   }
 
-  .hero-visual__video {
-    display: block;
+  .hero-visual svg {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 65% center;
+    height: auto;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .pulse {
+      animation: pulse 2.4s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    .pulse--delay {
+      animation-delay: 1.2s;
+    }
+
+    .dial {
+      animation: spin 90s linear infinite;
+      transform-origin: 280px 280px;
+    }
+
+    @keyframes pulse {
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.45;
+        transform: scale(1.4);
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
   }
 </style>

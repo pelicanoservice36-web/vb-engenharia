@@ -156,7 +156,11 @@ Também está em `Logo/VB-Engenharia.png` um mosaico com 4 fotos de estilo banco
 
 ## Vídeo do Hero
 
-`Video/Video-VB-Engenharia.mp4` é o vídeo institucional original fornecido pela empresa (mostra um técnico com o uniforme oficial da VB Engenharia). Ele é recodificado para web e guardado em `public/videos/vb-engenharia-hero.mp4` (sem faixa de áudio — o vídeo toca mudo — e reduzido para 960px de largura, ~520KB). O poster (primeiro frame) é gerado a partir desse mesmo arquivo e otimizado via `astro:assets` em `src/components/sections/HeroVisual.astro`.
+`Video/Video-VB-Engenharia.mp4` é o vídeo institucional original fornecido pela empresa (mostra um técnico com o uniforme oficial da VB Engenharia). Ele é recodificado para web e guardado em `public/videos/vb-engenharia-hero.mp4` (sem faixa de áudio — o vídeo toca mudo — e reduzido para 960px de largura, ~520KB). O poster (primeiro frame) é gerado a partir desse mesmo arquivo e otimizado via `astro:assets` em `src/components/sections/HeroBackgroundVideo.astro`.
+
+O Hero segue o modelo full-bleed pedido pelo cliente (mesma referência de `clinica-samya.pelicanoservice36.workers.dev`): o `<video>` ocupa a seção inteira (`position: absolute; inset: 0`), com dois gradientes por cima (`.hero__overlay--x`/`--y` em `Hero.astro`) escurecendo mais a esquerda, onde o texto fica, e o texto num único bloco (`max-width`, sem grid de 2 colunas).
+
+`HeroBackgroundVideo.astro` é um componente **separado** de `HeroVisual.astro` (o motivo SVG de "diagrama de circuito", ainda usado por `Impact.astro` e `About.astro`) de propósito: já aconteceu de colocar o vídeo em `HeroVisual.astro` e ele, sendo `position: absolute`, vazar para essas outras seções (que não esperam um filho posicionado absolutamente) e cobrir a página inteira. Ao editar o visual de uma seção, confira com `grep -rn "HeroVisual\|HeroBackgroundVideo"` quem mais importa o componente antes de mudar seu CSS de posicionamento.
 
 Vídeos não passam pelo pipeline de otimização de imagens do Astro — por isso ficam em `public/`, servidos como arquivo estático, em vez de `src/assets/`. Para trocar o vídeo, recodifique o novo arquivo (recomendado: sem áudio, ~960px de largura, H.264, `faststart`) e substitua `public/videos/vb-engenharia-hero.mp4`, depois gere um novo poster a partir do primeiro frame.
 
