@@ -1,7 +1,9 @@
 ---
 import Container from '../ui/Container.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
-import ServiceCard from './ServiceCard.astro';
+import TabAccordion from '../ui/TabAccordion.astro';
+import Button from '../ui/Button.astro';
+import Icon from '../icons/Icon.astro';
 import { serviceCategories } from '../../data/services';
 ---
 
@@ -9,16 +11,45 @@ import { serviceCategories } from '../../data/services';
   <Container>
     <SectionHeading
       id="services-title"
+      index={4}
       eyebrow="Serviços"
       title="Soluções completas em engenharia elétrica"
       subtitle="Da elaboração do projeto à execução, manutenção e adequação das instalações."
       align="center"
     />
-    <div class="services__grid">
-      {serviceCategories.map((category) => (
-        <ServiceCard category={category} />
+    <TabAccordion class="services__tabs" groupLabel="Categorias de serviço">
+      {serviceCategories.map((category, i) => (
+        <details class="tab-accordion__item" data-tab-item data-id={category.id} open={i === 0}>
+          <summary class="tab-accordion__summary" data-tab-trigger>
+            <Icon name={category.icon} size={20} />
+            <span>{category.title}</span>
+            <Icon name="chevron-down" size={18} class="tab-accordion__chevron" />
+          </summary>
+          <div class="tab-accordion__panel" data-tab-panel>
+            <div class="service-panel">
+              <div class="service-panel__icon">
+                <Icon name={category.icon} size={32} />
+              </div>
+              <div class="service-panel__body">
+                <h3>{category.title}</h3>
+                <p class="service-panel__description">{category.description}</p>
+                <ul class="service-panel__list">
+                  {category.items.map((item) => (
+                    <li>
+                      <Icon name="check" size={16} />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button href="#contato" variant="secondary">
+                  Solicitar orçamento
+                </Button>
+              </div>
+            </div>
+          </div>
+        </details>
       ))}
-    </div>
+    </TabAccordion>
   </Container>
 </section>
 
@@ -28,16 +59,60 @@ import { serviceCategories } from '../../data/services';
     background: var(--color-surface);
   }
 
-  .services__grid {
+  .services :global(.services__tabs) {
     margin-top: var(--space-xl);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  .service-panel {
+    display: flex;
     gap: var(--space-md);
   }
 
-  @media (max-width: 640px) {
-    .services__grid {
-      grid-template-columns: 1fr;
+  .service-panel__icon {
+    display: none;
+  }
+
+  .service-panel__body h3 {
+    margin-bottom: var(--space-xs);
+  }
+
+  .service-panel__description {
+    color: var(--color-gray-technical);
+    margin-bottom: var(--space-md);
+  }
+
+  .service-panel__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+  }
+
+  .service-panel__list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2xs);
+    font-size: var(--fs-small);
+    color: var(--color-graphite);
+  }
+
+  .service-panel__list :global(svg) {
+    color: var(--color-blue-electric);
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+  }
+
+  @media (min-width: 700px) {
+    .service-panel__icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 64px;
+      flex-shrink: 0;
+      border-radius: var(--radius-md);
+      background: var(--color-surface-alt);
+      color: var(--color-blue-electric);
     }
   }
 </style>

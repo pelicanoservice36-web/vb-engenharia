@@ -1,0 +1,99 @@
+/*
+  Shell compartilhado de TabAccordion (src/components/ui/TabAccordion.astro).
+  Fica em CSS global (não em <style> escopado) de propósito: o conteúdo de
+  cada painel é escrito diretamente pelos componentes que consomem
+  TabAccordion (Services.astro, MissionVisionValues.astro) dentro do próprio
+  slot padrão — não por nomes de slot dinâmicos por item, que quebram o
+  fechamento de escopo no código gerado pelo compilador do Astro quando
+  usados dentro de um .map(). Como o conteúdo não é escrito no template do
+  próprio TabAccordion.astro, um <style> escopado ali não alcançaria essas
+  classes de qualquer forma — por isso o shell interativo vive aqui.
+*/
+.tab-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.tab-accordion__item {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  overflow: clip;
+}
+
+.tab-accordion__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.tab-accordion__summary::-webkit-details-marker {
+  display: none;
+}
+
+.tab-accordion__summary:focus-visible {
+  outline: 3px solid var(--color-blue-electric);
+  outline-offset: -3px;
+}
+
+.tab-accordion__chevron {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--color-gray-technical);
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+
+.tab-accordion:not(.is-enhanced) .tab-accordion__item[open] .tab-accordion__chevron {
+  transform: rotate(180deg);
+}
+
+.tab-accordion__panel {
+  padding: 0 var(--space-md) var(--space-md);
+}
+
+.tab-accordion.is-enhanced .tab-accordion__item:not(.is-active) .tab-accordion__panel {
+  display: none;
+}
+
+.tab-accordion.is-enhanced .tab-accordion__item.is-active .tab-accordion__chevron {
+  transform: rotate(180deg);
+}
+
+@media (min-width: 900px) {
+  .tab-accordion.is-enhanced {
+    display: grid;
+    grid-template-columns: 15rem 1fr;
+    gap: var(--space-md);
+  }
+
+  .tab-accordion.is-enhanced .tab-accordion__item {
+    display: contents;
+  }
+
+  .tab-accordion.is-enhanced .tab-accordion__summary {
+    grid-column: 1;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+  }
+
+  .tab-accordion.is-enhanced .tab-accordion__item.is-active .tab-accordion__summary {
+    border-color: var(--color-blue-electric);
+    background: var(--color-surface-alt);
+  }
+
+  .tab-accordion.is-enhanced .tab-accordion__panel {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    align-self: start;
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+}

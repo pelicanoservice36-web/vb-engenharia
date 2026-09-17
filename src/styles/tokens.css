@@ -22,6 +22,9 @@
   --color-gray-technical: #55606b; /* texto secundário sobre branco — 6.42:1 */
   --color-gray-on-navy: #b8c4d9; /* texto secundário sobre navy — 9.24:1 */
 
+  --color-error: #b3261e; /* borda de campo inválido — 6.54:1 sobre branco */
+  --color-success: #2e7d32; /* borda de campo válido — 5.13:1 sobre branco */
+
   --color-surface: #ffffff;
   --color-surface-alt: #f4f6f9;
   --color-border: #e2e6ec;
@@ -67,6 +70,13 @@
   --shadow-lg: 0 20px 48px rgba(10, 31, 68, 0.18);
 
   --header-height: 76px;
+  --mobile-bar-height: 64px;
+
+  /* camadas — registradas aqui para não acumular z-index soltos pelo CSS */
+  --z-header: 100;
+  --z-fixed-action: 90;
+  --z-skip-link: 1000;
+  --z-lightbox: 200;
 
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --duration-fast: 150ms;

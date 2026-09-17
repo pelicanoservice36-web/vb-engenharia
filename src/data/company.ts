@@ -7,10 +7,10 @@ export interface TrustItem {
 }
 
 export const trustItems: TrustItem[] = [
-  { id: 'since', value: 'Desde 2014', label: 'Experiência no mercado' },
-  { id: 'field', value: 'Engenharia Elétrica', label: 'Soluções completas' },
-  { id: 'technical', value: 'Responsabilidade Técnica', label: 'Projetos e serviços especializados' },
-  { id: 'segments', value: 'Industrial • Comercial • Predial', label: 'Atuação diversificada' },
+  { id: 'since', value: '2014', label: 'Fundação' },
+  { id: 'experience', value: '+30 anos', label: 'Experiência do responsável técnico' },
+  { id: 'field', value: 'Engenharia Elétrica', label: 'Soluções especializadas' },
+  { id: 'segments', value: 'Industrial • Comercial • Predial', label: 'Segmentos atendidos' },
 ];
 
 export const about = {
@@ -67,6 +67,12 @@ export const differentials: Differential[] = [
     icon: 'bolt',
   },
 ];
+
+export const technicalLead = {
+  name: 'Valtencir Bueno',
+  role: 'CEO e Responsável Técnico',
+  credentials: ['Engenheiro formado desde 2010', 'Mais de 30 anos de experiência no mercado'],
+};
 
 export interface MissionVisionValue {
   id: 'mission' | 'vision' | 'values';

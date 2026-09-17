@@ -1,25 +1,22 @@
 ---
-import Container from '../ui/Container.astro';
-import SectionHeading from '../ui/SectionHeading.astro';
+// Fragmento (sem <section> própria) — usado dentro de About.astro, na
+// seção "Empresa", que já fornece o <h2> da página.
+import TabAccordion from '../ui/TabAccordion.astro';
 import Icon from '../icons/Icon.astro';
 import { missionVisionValues } from '../../data/company';
 ---
 
-<section class="mvv" aria-labelledby="mvv-title">
-  <Container>
-    <SectionHeading
-      id="mvv-title"
-      eyebrow="Nosso lema"
-      title="Missão, visão e valores"
-      align="center"
-    />
-    <div class="mvv__grid">
-      {missionVisionValues.map((item) => (
-        <article class="mvv__card" data-reveal>
-          <div class="mvv__icon">
-            <Icon name={item.icon} size={26} />
-          </div>
-          <h3>{item.title}</h3>
+<div class="mvv">
+  <h3 class="mvv__heading">Missão, visão e valores</h3>
+  <TabAccordion groupLabel="Missão, visão e valores">
+    {missionVisionValues.map((item, i) => (
+      <details class="tab-accordion__item" data-tab-item data-id={item.id} open={i === 0}>
+        <summary class="tab-accordion__summary" data-tab-trigger>
+          <Icon name={item.icon} size={20} />
+          <span>{item.title}</span>
+          <Icon name="chevron-down" size={18} class="tab-accordion__chevron" />
+        </summary>
+        <div class="tab-accordion__panel" data-tab-panel>
           {Array.isArray(item.content) ? (
             <ul class="mvv__values">
               {item.content.map((value) => (
@@ -30,65 +27,38 @@ import { missionVisionValues } from '../../data/company';
               ))}
             </ul>
           ) : (
-            <p>{item.content}</p>
+            <p class="mvv__text">{item.content}</p>
           )}
-        </article>
-      ))}
-    </div>
-  </Container>
-</section>
+        </div>
+      </details>
+    ))}
+  </TabAccordion>
+</div>
 
 <style>
   .mvv {
-    padding-block: var(--space-2xl);
-    background: var(--color-surface);
+    margin-top: var(--space-2xl);
   }
 
-  .mvv__grid {
-    margin-top: var(--space-xl);
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-md);
-  }
-
-  .mvv__card {
-    background: var(--color-surface-alt);
-    border-radius: var(--radius-lg);
-    padding: var(--space-lg);
-    height: 100%;
-  }
-
-  .mvv__icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 52px;
-    height: 52px;
-    border-radius: var(--radius-md);
-    background: var(--color-navy);
-    color: var(--color-orange-light);
+  .mvv__heading {
     margin-bottom: var(--space-md);
   }
 
-  .mvv__card h3 {
-    margin-bottom: var(--space-sm);
-  }
-
-  .mvv__card p {
+  .mvv__text {
     color: var(--color-gray-technical);
+    font-size: var(--fs-lead);
   }
 
   .mvv__values {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2xs);
+    gap: var(--space-xs);
   }
 
   .mvv__values li {
     display: flex;
     align-items: flex-start;
     gap: var(--space-2xs);
-    font-size: var(--fs-small);
     color: var(--color-gray-technical);
   }
 
@@ -96,11 +66,5 @@ import { missionVisionValues } from '../../data/company';
     color: var(--color-blue-electric);
     flex-shrink: 0;
     margin-top: 0.2rem;
-  }
-
-  @media (max-width: 900px) {
-    .mvv__grid {
-      grid-template-columns: 1fr;
-    }
   }
 </style>

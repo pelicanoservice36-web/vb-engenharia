@@ -4,8 +4,9 @@ import type { Differential } from '../../data/company';
 
 interface Props {
   differential: Differential;
+  index: number;
 }
-const { differential } = Astro.props;
+const { differential, index } = Astro.props;
 ---
 
 <article class="differential" data-reveal>
@@ -13,6 +14,7 @@ const { differential } = Astro.props;
     <Icon name={differential.icon} size={26} />
   </div>
   <div>
+    <p class="differential__index" aria-hidden="true">{String(index).padStart(2, '0')}</p>
     <h3>{differential.title}</h3>
     <p>{differential.description}</p>
   </div>
@@ -36,6 +38,14 @@ const { differential } = Astro.props;
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid var(--color-border-on-navy);
     color: var(--color-orange);
+  }
+
+  .differential__index {
+    font-size: var(--fs-small);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--color-orange);
+    margin-bottom: var(--space-3xs);
   }
 
   .differential h3 {

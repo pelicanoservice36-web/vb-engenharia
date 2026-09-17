@@ -1,0 +1,102 @@
+---
+import Container from '../ui/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Icon from '../icons/Icon.astro';
+import { problemSolution } from '../../data/narrative';
+---
+
+<section class="problem-solution" aria-labelledby="problem-solution-title">
+  <Container>
+    <SectionHeading
+      id="problem-solution-title"
+      index={2}
+      eyebrow="Do desafio ao resultado"
+      title="Engenharia elétrica é planejamento antes de ser execução."
+      align="center"
+      tone="on-dark"
+    />
+    <ol class="chain">
+      {problemSolution.map((step, i) => (
+        <li class="chain__step" data-reveal>
+          <div class="chain__icon">
+            <Icon name={step.icon} size={26} />
+          </div>
+          <p class="chain__label">{step.label}</p>
+          <p class="chain__description">{step.description}</p>
+          {i < problemSolution.length - 1 && (
+            <Icon name="arrow-right" size={20} class="chain__arrow" />
+          )}
+        </li>
+      ))}
+    </ol>
+  </Container>
+</section>
+
+<style>
+  .problem-solution {
+    background: var(--color-navy);
+    padding-block: var(--space-2xl);
+  }
+
+  .chain {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--space-2xl);
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-sm);
+  }
+
+  .chain__step {
+    position: relative;
+    text-align: center;
+    padding-inline: var(--space-xs);
+  }
+
+  .chain__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--color-border-on-navy);
+    color: var(--color-orange);
+    margin-bottom: var(--space-sm);
+  }
+
+  .chain__label {
+    font-weight: 700;
+    color: var(--color-white);
+    margin-bottom: var(--space-3xs);
+  }
+
+  .chain__description {
+    font-size: var(--fs-small);
+    color: var(--color-gray-on-navy);
+  }
+
+  .chain__step :global(.chain__arrow) {
+    display: none;
+    position: absolute;
+    top: 22px;
+    right: calc(-1 * var(--space-sm) - 10px);
+    color: var(--color-gray-on-navy);
+  }
+
+  @media (min-width: 800px) {
+    .chain__step :global(.chain__arrow) {
+      display: block;
+    }
+  }
+
+  @media (max-width: 800px) {
+    .chain {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+      max-width: 26rem;
+      margin-inline: auto;
+    }
+  }
+</style>

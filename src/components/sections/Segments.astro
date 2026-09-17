@@ -5,17 +5,19 @@ import SegmentCard from './SegmentCard.astro';
 import { segments } from '../../data/segments';
 ---
 
-<section class="segments" aria-labelledby="segments-title">
+<section class="segments" id="solucoes" aria-labelledby="segments-title">
   <Container>
     <SectionHeading
       id="segments-title"
-      eyebrow="Segmentos de atuação"
+      index={3}
+      eyebrow="Soluções"
       title="Soluções para diferentes necessidades"
+      subtitle="Industrial, comercial ou predial: cada segmento tem suas próprias exigências técnicas."
       align="center"
     />
-    <div class="segments__grid">
-      {segments.map((segment) => (
-        <SegmentCard segment={segment} />
+    <div class="segments__list">
+      {segments.map((segment, i) => (
+        <SegmentCard segment={segment} reverse={i % 2 === 1} />
       ))}
     </div>
   </Container>
@@ -24,23 +26,17 @@ import { segments } from '../../data/segments';
 <style>
   .segments {
     padding-block: var(--space-2xl);
-    background: var(--color-surface-alt);
+    background: var(--color-surface);
   }
 
   .segments :global(h2) {
-    margin: 0 auto;
+    margin-inline: auto;
   }
 
-  .segments__grid {
-    margin-top: var(--space-xl);
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-md);
-  }
-
-  @media (max-width: 800px) {
-    .segments__grid {
-      grid-template-columns: 1fr;
-    }
+  .segments__list {
+    margin-top: var(--space-2xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl);
   }
 </style>

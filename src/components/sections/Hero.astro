@@ -14,7 +14,7 @@ import { hero } from '../../data/hero';
         <p class="hero__subtitle">{hero.subtitle}</p>
         <div class="hero__ctas">
           <Button href={hero.primaryCta.href} variant="primary">{hero.primaryCta.label}</Button>
-          <Button href={hero.secondaryCta.href} variant="secondary">{hero.secondaryCta.label}</Button>
+          <Button href={hero.secondaryCta.href} variant="secondary">{hero.secondaryCta.label} ↓</Button>
         </div>
       </div>
       <HeroVisual class="hero__visual" />
@@ -27,10 +27,14 @@ import { hero } from '../../data/hero';
     background: linear-gradient(180deg, var(--color-navy) 0%, #0d264f 100%);
     color: var(--color-white);
     padding-block: var(--space-2xl) var(--space-xl);
+    min-height: 82vh;
+    display: flex;
+    align-items: center;
     overflow: clip;
   }
 
   .hero__inner {
+    width: 100%;
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
     align-items: center;

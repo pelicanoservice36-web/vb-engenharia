@@ -1,0 +1,18 @@
+---
+// Wrapper fino: só o container + atributos para o enhancement de
+// src/scripts/tabs.ts. O conteúdo (cada <details data-tab-item>, com
+// <summary data-tab-trigger> e painel data-tab-panel) é escrito pelo
+// componente que consome este wrapper, dentro do slot padrão — ver
+// src/styles/tab-accordion.css para o porquê disso não usar slots
+// nomeados por item.
+interface Props {
+  groupLabel: string;
+  class?: string;
+}
+
+const { groupLabel, class: className } = Astro.props;
+---
+
+<div class:list={['tab-accordion', className]} data-tab-accordion data-group-label={groupLabel}>
+  <slot />
+</div>

@@ -1,15 +1,14 @@
 export const hero = {
   eyebrow: 'Engenharia Elétrica',
-  title: 'Soluções em engenharia elétrica com segurança, qualidade e responsabilidade técnica.',
-  subtitle:
-    'Projetos, instalações, manutenção e soluções elétricas para os segmentos industrial, comercial e predial.',
+  title: 'Engenharia elétrica para projetos que exigem precisão, segurança e responsabilidade.',
+  subtitle: 'Soluções completas para instalações industriais, comerciais e prediais.',
   primaryCta: { label: 'Solicitar orçamento', href: '#contato' },
-  secondaryCta: { label: 'Conheça nossos serviços', href: '#servicos' },
+  secondaryCta: { label: 'Conhecer nossas soluções', href: '#solucoes' },
 };
 
 export const ctaFinal = {
-  title: 'Vamos começar uma parceria de sucesso?',
-  description: 'Entre em contato com a VB Engenharia e fale com nossa equipe sobre sua necessidade.',
+  title: 'Vamos conversar sobre seu projeto?',
+  description: 'Conte-nos sobre sua necessidade e fale com a equipe da VB Engenharia.',
   primaryCta: { label: 'Solicitar orçamento', href: '#contato' },
-  secondaryCtaLabel: 'Falar pelo WhatsApp',
+  secondaryCtaLabel: 'WhatsApp',
 };

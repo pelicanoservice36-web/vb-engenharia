@@ -1,28 +1,55 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import Container from '../ui/Container.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
+import Icon from '../icons/Icon.astro';
 import { experiencePhotos } from '../../data/experience';
+
+const photos = await Promise.all(
+  experiencePhotos.map(async (photo) => {
+    const full = await getImage({ src: photo.image, width: 1600, format: 'webp' });
+    return { ...photo, fullSrc: full.src };
+  })
+);
 ---
 
 <section class="experience" id="experiencia" aria-labelledby="experience-title">
   <Container>
     <SectionHeading
       id="experience-title"
+      index={7}
       eyebrow="Experiência"
-      title="Experiência que se transforma em solução"
+      title="Engenharia que acontece na prática"
       subtitle="Um pouco das nossas atividades em campo: montagem de infraestrutura, instalações, laudos e testes em cabines, entre outros serviços executados junto aos nossos parceiros."
       align="center"
     />
     <div class="experience__grid">
-      {experiencePhotos.map((photo) => (
-        <figure class="experience__item" data-reveal>
-          <Image src={photo.image} alt={photo.alt} width={640} height={640} />
+      {photos.map((photo, i) => (
+        <figure class:list={['experience__item', i === 0 && 'experience__item--large']} data-reveal>
+          <a
+            href={photo.fullSrc}
+            data-lightbox-trigger
+            data-lightbox-alt={photo.alt}
+            data-lightbox-caption={photo.caption}
+            aria-label={`Ampliar foto: ${photo.caption}`}
+          >
+            <Image src={photo.image} alt={photo.alt} width={i === 0 ? 900 : 640} height={i === 0 ? 1000 : 640} />
+          </a>
           <figcaption>{photo.caption}</figcaption>
         </figure>
       ))}
     </div>
   </Container>
+
+  <dialog class="lightbox" data-lightbox aria-label="Foto ampliada">
+    <form method="dialog">
+      <button type="submit" class="lightbox__close" aria-label="Fechar">
+        <Icon name="close" size={22} />
+      </button>
+    </form>
+    <img data-lightbox-img alt="" />
+    <p class="lightbox__caption" data-lightbox-caption></p>
+  </dialog>
 </section>
 
 <style>
@@ -34,7 +61,7 @@ import { experiencePhotos } from '../../data/experience';
   .experience__grid {
     margin-top: var(--space-xl);
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1.3fr 1fr;
     gap: var(--space-md);
   }
 
@@ -43,7 +70,22 @@ import { experiencePhotos } from '../../data/experience';
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 4 / 3;
+  }
+
+  .experience__item--large {
+    aspect-ratio: 3 / 4;
+  }
+
+  .experience__item a {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .experience__item a:focus-visible {
+    outline: 3px solid var(--color-blue-electric);
+    outline-offset: -3px;
   }
 
   .experience__item :global(img) {
@@ -66,11 +108,71 @@ import { experiencePhotos } from '../../data/experience';
     color: var(--color-white);
     font-weight: 600;
     font-size: var(--fs-small);
+    pointer-events: none;
   }
 
-  @media (max-width: 640px) {
+  .lightbox {
+    /* o reset global (* { margin: 0 }) sobrescreve o `margin: auto` que o
+       navegador usa para centralizar um <dialog> modal — repõe aqui. */
+    margin: auto;
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: 0;
+    max-width: min(90vw, 1100px);
+    max-height: 90vh;
+    background: var(--color-navy);
+    z-index: var(--z-lightbox);
+  }
+
+  .lightbox::backdrop {
+    background: rgba(6, 14, 32, 0.85);
+  }
+
+  .lightbox[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lightbox__close {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-sm);
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: var(--radius-pill);
+    background: rgba(6, 14, 32, 0.75);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    color: var(--color-white);
+    cursor: pointer;
+  }
+
+  .lightbox__close:hover {
+    background: rgba(255, 255, 255, 0.22);
+  }
+
+  .lightbox img {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+  }
+
+  .lightbox__caption {
+    padding: var(--space-sm) var(--space-md);
+    color: var(--color-gray-on-navy);
+    font-size: var(--fs-small);
+  }
+
+  @media (max-width: 700px) {
     .experience__grid {
       grid-template-columns: 1fr;
+    }
+
+    .experience__item--large {
+      aspect-ratio: 4 / 3;
     }
   }
 </style>

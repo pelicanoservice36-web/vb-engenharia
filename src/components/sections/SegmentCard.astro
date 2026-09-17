@@ -1,55 +1,136 @@
 ---
 import Icon from '../icons/Icon.astro';
+import Button from '../ui/Button.astro';
+import { serviceCategories } from '../../data/services';
 import type { Segment } from '../../data/segments';
 
 interface Props {
   segment: Segment;
+  reverse?: boolean;
 }
-const { segment } = Astro.props;
+const { segment, reverse = false } = Astro.props;
+const relatedServices = serviceCategories.filter((s) => segment.relatedServiceIds.includes(s.id));
 ---
 
-<article class="segment-card" data-reveal>
-  <div class="segment-card__icon">
-    <Icon name={segment.icon} size={28} />
+<article class:list={['segment-row', { 'segment-row--reverse': reverse }]} data-reveal>
+  <div class="segment-row__visual" aria-hidden="true">
+    <div class="segment-row__visual-grid"></div>
+    <div class="segment-row__visual-badge">
+      <Icon name={segment.icon} size={48} />
+    </div>
   </div>
-  <h3>{segment.title}</h3>
-  <p>{segment.description}</p>
+  <div class="segment-row__body">
+    <h3>{segment.title}</h3>
+    <p class="segment-row__description">{segment.description}</p>
+    {relatedServices.length > 0 && (
+      <ul class="segment-row__services">
+        {relatedServices.map((service) => (
+          <li>
+            <Icon name={service.icon} size={16} />
+            <span>{service.title}</span>
+          </li>
+        ))}
+      </ul>
+    )}
+    <Button href="#servicos" variant="ghost" icon="arrow-right">
+      Ver serviços relacionados
+    </Button>
+  </div>
 </article>
 
 <style>
-  .segment-card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
+  .segment-row {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .segment-row--reverse {
+    grid-template-columns: 1.15fr 0.85fr;
+  }
+
+  .segment-row--reverse .segment-row__visual {
+    order: 2;
+  }
+
+  .segment-row__visual {
+    position: relative;
+    aspect-ratio: 4 / 3;
     border-radius: var(--radius-lg);
-    padding: var(--space-lg);
-    transition: transform var(--duration-base) var(--ease-standard),
-      box-shadow var(--duration-base) var(--ease-standard),
-      border-color var(--duration-base) var(--ease-standard);
-  }
-
-  .segment-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--color-blue-electric);
-  }
-
-  .segment-card__icon {
-    display: inline-flex;
+    background: linear-gradient(155deg, var(--color-navy) 0%, #0d264f 100%);
+    display: flex;
     align-items: center;
     justify-content: center;
-    width: 56px;
-    height: 56px;
-    border-radius: var(--radius-md);
-    background: var(--color-navy);
-    color: var(--color-white);
+    overflow: hidden;
+  }
+
+  .segment-row__visual-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(var(--color-blue-electric-light) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.18;
+  }
+
+  .segment-row__visual-badge {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 128px;
+    height: 128px;
+    color: var(--color-orange);
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--color-border-on-navy);
+  }
+
+  .segment-row__body h3 {
+    margin-bottom: var(--space-sm);
+  }
+
+  .segment-row__description {
+    color: var(--color-gray-technical);
+    font-size: var(--fs-lead);
     margin-bottom: var(--space-md);
   }
 
-  .segment-card h3 {
-    margin-bottom: var(--space-2xs);
+  .segment-row__services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
   }
 
-  .segment-card p {
-    color: var(--color-gray-technical);
+  .segment-row__services li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    padding: var(--space-3xs) var(--space-sm);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-alt);
+    font-size: var(--fs-small);
+    font-weight: 600;
+    color: var(--color-navy);
+  }
+
+  .segment-row__services :global(svg) {
+    color: var(--color-blue-electric);
+  }
+
+  @media (max-width: 800px) {
+    .segment-row,
+    .segment-row--reverse {
+      grid-template-columns: 1fr;
+    }
+
+    .segment-row--reverse .segment-row__visual {
+      order: 0;
+    }
+
+    .segment-row__visual {
+      aspect-ratio: 16 / 9;
+    }
   }
 </style>

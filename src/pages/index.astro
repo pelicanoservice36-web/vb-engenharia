@@ -3,17 +3,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/sections/Header.astro';
 import Hero from '../components/sections/Hero.astro';
 import TrustBar from '../components/sections/TrustBar.astro';
-import About from '../components/sections/About.astro';
+import Impact from '../components/sections/Impact.astro';
+import ProblemSolution from '../components/sections/ProblemSolution.astro';
 import Segments from '../components/sections/Segments.astro';
 import Services from '../components/sections/Services.astro';
 import Differentials from '../components/sections/Differentials.astro';
+import Approach from '../components/sections/Approach.astro';
 import Experience from '../components/sections/Experience.astro';
-import MissionVisionValues from '../components/sections/MissionVisionValues.astro';
+import About from '../components/sections/About.astro';
 import Clients from '../components/sections/Clients.astro';
 import CtaFinal from '../components/sections/CtaFinal.astro';
 import Contact from '../components/sections/Contact.astro';
 import Footer from '../components/sections/Footer.astro';
 import WhatsAppButton from '../components/WhatsAppButton.astro';
+import MobileActionBar from '../components/MobileActionBar.astro';
 ---
 
 <BaseLayout>
@@ -21,16 +24,19 @@ import WhatsAppButton from '../components/WhatsAppButton.astro';
   <main id="main-content">
     <Hero />
     <TrustBar />
-    <About />
+    <Impact />
+    <ProblemSolution />
     <Segments />
     <Services />
     <Differentials />
+    <Approach />
     <Experience />
-    <MissionVisionValues />
+    <About />
     <Clients />
     <CtaFinal />
     <Contact />
   </main>
   <Footer />
   <WhatsAppButton />
+  <MobileActionBar />
 </BaseLayout>

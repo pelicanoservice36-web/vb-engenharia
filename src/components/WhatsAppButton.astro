@@ -22,7 +22,7 @@ const whatsAppUrl = buildWhatsAppUrl(defaultWhatsAppContact.phoneE164);
     position: fixed;
     right: var(--space-md);
     bottom: var(--space-md);
-    z-index: 90;
+    z-index: var(--z-fixed-action);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -39,5 +39,12 @@ const whatsAppUrl = buildWhatsAppUrl(defaultWhatsAppContact.phoneE164);
   .whatsapp-float:hover {
     transform: translateY(-3px);
     background: var(--color-navy-700);
+  }
+
+  /* No mobile a MobileActionBar já cobre o WhatsApp — evita CTA duplicado. */
+  @media (max-width: 900px) {
+    .whatsapp-float {
+      display: none;
+    }
   }
 </style>

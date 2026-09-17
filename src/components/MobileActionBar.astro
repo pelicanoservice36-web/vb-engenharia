@@ -1,0 +1,56 @@
+---
+import Icon from './icons/Icon.astro';
+import { defaultWhatsAppContact, buildWhatsAppUrl } from '../data/contacts';
+
+const whatsAppUrl = buildWhatsAppUrl(defaultWhatsAppContact.phoneE164);
+---
+
+<div class="mobile-bar" role="region" aria-label="Ações rápidas">
+  <a class="mobile-bar__link" href={whatsAppUrl} target="_blank" rel="noopener noreferrer">
+    <Icon name="chat" size={20} />
+    WhatsApp
+  </a>
+  <a class="mobile-bar__link mobile-bar__link--primary" href="#contato">
+    <Icon name="arrow-right" size={20} />
+    Orçamento
+  </a>
+</div>
+
+<style>
+  .mobile-bar {
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    .mobile-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: fixed;
+      inset-inline: 0;
+      bottom: 0;
+      z-index: var(--z-fixed-action);
+      background: var(--color-navy);
+      border-top: 1px solid var(--color-border-on-navy);
+      padding-bottom: max(0px, env(safe-area-inset-bottom, 0px));
+      box-shadow: var(--shadow-lg);
+    }
+  }
+
+  .mobile-bar__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2xs);
+    padding: var(--space-sm);
+    min-height: var(--mobile-bar-height);
+    color: var(--color-white);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: var(--fs-small);
+  }
+
+  .mobile-bar__link--primary {
+    background: var(--color-orange);
+    color: var(--color-graphite);
+  }
+</style>

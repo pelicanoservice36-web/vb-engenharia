@@ -1,6 +1,7 @@
 ---
 interface Props {
   id?: string;
+  index?: number;
   eyebrow?: string;
   title: string;
   subtitle?: string;
@@ -9,11 +10,16 @@ interface Props {
   class?: string;
 }
 
-const { id, eyebrow, title, subtitle, align = 'left', tone = 'on-light', class: className } = Astro.props;
+const { id, index, eyebrow, title, subtitle, align = 'left', tone = 'on-light', class: className } = Astro.props;
 ---
 
 <div class:list={['heading', `heading--${align}`, `heading--${tone}`, className]}>
-  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  {eyebrow && (
+    <p class="eyebrow">
+      {typeof index === 'number' && <span aria-hidden="true">{String(index).padStart(2, '0')} / </span>}
+      {eyebrow}
+    </p>
+  )}
   <h2 id={id}>{title}</h2>
   {subtitle && <p class="subtitle">{subtitle}</p>}
 </div>

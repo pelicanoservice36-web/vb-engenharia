@@ -1,0 +1,56 @@
+---
+import Container from '../ui/Container.astro';
+import HeroVisual from './HeroVisual.astro';
+---
+
+<section class="impact" id="impacto" aria-labelledby="impact-title">
+  <Container class="impact__inner">
+    <div class="impact__text">
+      <p class="eyebrow"><span aria-hidden="true">01 / </span>Engenharia elétrica</p>
+      <h2 id="impact-title">Da necessidade elétrica à solução técnica.</h2>
+      <p class="impact__lead">
+        Projetamos, executamos, inspecionamos e mantemos soluções elétricas com responsabilidade técnica —
+        para os segmentos industrial, comercial e predial.
+      </p>
+    </div>
+    <HeroVisual class="impact__visual" />
+  </Container>
+</section>
+
+<style>
+  .impact {
+    padding-block: var(--space-3xl);
+    background: var(--color-surface);
+  }
+
+  .impact__inner {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    align-items: center;
+    gap: var(--space-2xl);
+  }
+
+  .impact__text h2 {
+    font-size: clamp(2rem, 1.5rem + 2.5vw, 3.25rem);
+    line-height: 1.1;
+    margin-block: var(--space-md) var(--space-lg);
+    max-width: 16ch;
+  }
+
+  .impact__lead {
+    font-size: var(--fs-lead);
+    color: var(--color-gray-technical);
+    max-width: 42ch;
+  }
+
+  @media (max-width: 900px) {
+    .impact__inner {
+      grid-template-columns: 1fr;
+    }
+
+    :global(.impact__visual) {
+      max-width: 280px;
+      margin-inline: auto;
+    }
+  }
+</style>

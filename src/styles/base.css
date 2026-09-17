@@ -23,6 +23,13 @@ body {
   min-height: 100svh;
 }
 
+/* Espaço reservado para a MobileActionBar fixa não sobrepor o rodapé. */
+@media (max-width: 900px) {
+  body {
+    padding-bottom: calc(var(--mobile-bar-height) + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 img,
 picture,
 svg {

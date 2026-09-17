@@ -60,12 +60,12 @@ const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
   }
 
   .btn--primary {
-    background: var(--color-blue-electric);
-    color: var(--color-white);
+    background: var(--color-orange);
+    color: var(--color-graphite);
   }
 
   .btn--primary:hover {
-    background: var(--color-navy-700);
+    background: var(--color-orange-light);
   }
 
   .btn--secondary {
@@ -75,7 +75,7 @@ const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
   }
 
   .btn--secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: color-mix(in srgb, currentColor 12%, transparent);
   }
 
   .btn--ghost {

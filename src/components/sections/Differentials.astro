@@ -9,14 +9,16 @@ import { differentials } from '../../data/company';
   <Container>
     <SectionHeading
       id="differentials-title"
+      index={5}
       eyebrow="Diferenciais"
-      title="Por que trabalhar com a VB Engenharia?"
+      title="Responsabilidade técnica em cada etapa."
+      subtitle="Por que trabalhar com a VB Engenharia?"
       align="center"
       tone="on-dark"
     />
     <div class="differentials__grid">
-      {differentials.map((differential) => (
-        <DifferentialItem differential={differential} />
+      {differentials.map((differential, i) => (
+        <DifferentialItem differential={differential} index={i + 1} />
       ))}
     </div>
   </Container>

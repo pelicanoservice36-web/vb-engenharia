@@ -10,7 +10,7 @@ Todo o conteúdo institucional (missão, visão, valores, serviços, diferenciai
 - CSS puro com *custom properties* (sem Tailwind, sem framework de UI)
 - [`@fontsource-variable/inter`](https://fontsource.org/fonts/inter) — fonte Inter self-hosted (zero requisição externa)
 - [`@astrojs/sitemap`](https://docs.astro.build/en/guides/integrations-guide/sitemap/) — `sitemap.xml` gerado automaticamente no build
-- JavaScript vanilla mínimo (sem React/Vue): menu mobile, header sticky, botão de WhatsApp, scroll-reveal e validação do formulário de contato
+- JavaScript vanilla mínimo (sem React/Vue): menu mobile, header sticky, botão de WhatsApp, scroll-reveal, validação do formulário de contato, tabs/accordion acessíveis (`src/scripts/tabs.ts`) e lightbox da galeria (`src/scripts/lightbox.ts`)
 
 ## Desenvolvimento local
 
@@ -28,24 +28,30 @@ npm run check     # roda só o typecheck
 
 ```
 src/
-├── assets/images/       # fotos e logos de clientes (otimizados no build via astro:assets)
+├── assets/images/       # fotos, logos de clientes e logo oficial (otimizados no build via astro:assets)
 │   ├── experience/       # fotos reais de atividades de campo
-│   └── clients/          # logos reais de clientes
+│   ├── clients/          # logos reais de clientes
+│   └── logo/             # logo oficial recortada (ver "Sobre a pasta Logo/")
 ├── components/
-│   ├── Logo.astro         # logotipo recriado em SVG (não existe vetor oficial)
+│   ├── Logo.astro         # renderiza a logo oficial (src/assets/images/logo)
+│   ├── MobileActionBar.astro  # barra fixa inferior no mobile (WhatsApp + Orçamento)
+│   ├── WhatsAppButton.astro   # botão flutuante — só aparece no desktop (ver MobileActionBar)
 │   ├── icons/              # ícones em linha, originais (Icon.astro + paths.ts)
-│   ├── ui/                 # Button, Container, SectionHeading
-│   ├── WhatsAppButton.astro
+│   ├── ui/                 # Button, Container, SectionHeading, TabAccordion
 │   └── sections/           # um componente por seção da home (Header, Hero, Services...)
 ├── data/                 # todo o texto/dados do site, tipados — edite aqui (ver abaixo)
 ├── layouts/BaseLayout.astro  # <head>, SEO, JSON-LD, fontes
 ├── pages/index.astro     # composição da página única
-├── scripts/              # TS vanilla (header, scroll-reveal, contact-form)
-└── styles/               # tokens.css (cores/espaçamento), base.css, utilities.css
+├── scripts/              # TS vanilla (header, scroll-reveal, contact-form, tabs, lightbox)
+└── styles/               # tokens.css (cores/espaçamento), base.css, utilities.css, tab-accordion.css
 public/                  # favicon, robots.txt, sitemap gerado, og-image, manifest
 ```
 
-O site hoje é uma página única (`/`), mas a estrutura já está modular o bastante para no futuro virar páginas próprias (`/empresa`, `/servicos/spda`, `/contato` etc.) sem precisar reescrever o conteúdo — os dados de `src/data/services.ts` já estão organizados por categoria para isso.
+O site hoje é uma página única (`/`), mas a estrutura já está modular o bastante para no futuro virar páginas próprias sem precisar reescrever o conteúdo — os dados de `src/data/services.ts` já estão organizados por categoria para isso. Candidatas a página própria mais adiante: `/empresa`, `/servicos`, `/servicos/projetos-eletricos`, `/servicos/instalacoes-eletricas`, `/servicos/manutencao-eletrica`, `/servicos/painel-eletrico`, `/servicos/spda`, `/servicos/subestacoes`, `/servicos/grupos-geradores`, `/servicos/automacao-industrial`, `/servicos/laudos`, `/contato`. Nenhuma dessas rotas existe ainda — só a arquitetura já permite criá-las sem retrabalho. Quando existir mais de uma página navegável, vale adicionar `BreadcrumbList` ao JSON-LD (`src/data/seo.ts`) — hoje isso não é feito de propósito, porque com uma página só seria um dado fabricado.
+
+### Componente `TabAccordion`
+
+`src/components/ui/TabAccordion.astro` é usado pela seção Serviços e por Missão/Visão/Valores. Sem JavaScript, cada grupo é um accordion nativo (`<details>/<summary>`) — 100% funcional. Com JavaScript (`src/scripts/tabs.ts`), vira um tablist acessível de verdade (`role="tab"`, navegação por seta, `aria-selected`) no desktop, mantendo o comportamento de accordion no mobile. Ao adicionar um novo grupo, monte o HTML de cada `<details class="tab-accordion__item" data-tab-item data-id="...">` diretamente no componente que consome o `TabAccordion` (não use slots nomeados por item — um limitação conhecida do compilador do Astro quebra nomes de slot dinâmicos dentro de um `.map()`).
 
 ## Como alterar o conteúdo do site
 
@@ -54,14 +60,15 @@ Todo o texto e os dados estruturados ficam em `src/data/*.ts`, nunca direto nos 
 | O que mudar | Arquivo |
 |---|---|
 | Textos do Hero e do CTA final | `src/data/hero.ts` |
-| Sobre a empresa, diferenciais, missão/visão/valores, faixa de confiança | `src/data/company.ts` |
-| Segmentos de atuação | `src/data/segments.ts` |
-| Lista de serviços (por categoria) | `src/data/services.ts` |
+| Sobre a empresa, diferenciais, missão/visão/valores, faixa de confiança, responsável técnico | `src/data/company.ts` |
+| Segmentos de atuação (e serviços relacionados de cada um) | `src/data/segments.ts` |
+| Lista de serviços (por categoria, com descrição de cada uma) | `src/data/services.ts` |
+| Cadeia "desafio → resultado" e "Nossa abordagem" | `src/data/narrative.ts` |
 | Fotos da seção "Experiência" | `src/data/experience.ts` |
 | Logos de clientes | `src/data/clients.ts` |
 | Contatos (telefone, e-mail, WhatsApp) | `src/data/contacts.ts` |
 | Menu de navegação | `src/data/nav.ts` |
-| Título/descrição padrão e JSON-LD (Schema.org) | `src/data/seo.ts` |
+| Título/descrição padrão e JSON-LD (Schema.org, `@graph` com Organization/WebSite/Service) | `src/data/seo.ts` |
 
 ## Como trocar imagens
 
@@ -74,7 +81,7 @@ import novaFoto from '../assets/images/experience/nova-foto.jpg';
 
 ## Como alterar as cores
 
-Todas as cores são variáveis CSS em `src/styles/tokens.css`. A paleta atual foi validada para contraste **WCAG 2.2 AA**; ao trocar uma cor, confira o contraste do novo par fundo/texto (por exemplo em [webaim.org/resources/contrastchecker](https://webaim.org/resources/contrastchecker/)). Regra importante já documentada no arquivo: `--color-orange` não deve virar fundo de botão com texto branco (contraste insuficiente).
+Todas as cores são variáveis CSS em `src/styles/tokens.css`. A paleta atual foi validada para contraste **WCAG 2.2 AA**; ao trocar uma cor, confira o contraste do novo par fundo/texto (por exemplo em [webaim.org/resources/contrastchecker](https://webaim.org/resources/contrastchecker/)). Regra importante já documentada no arquivo: `--color-orange` como fundo sólido só passa AA com texto `--color-graphite` (5.02:1) — nunca com texto branco (3.51:1, reprova). É por isso que o botão primário (`.btn--primary` em `src/components/ui/Button.astro`) usa fundo laranja com texto grafite, não branco.
 
 ## Como alterar os contatos / WhatsApp
 

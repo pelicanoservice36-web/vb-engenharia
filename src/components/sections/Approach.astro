@@ -1,0 +1,89 @@
+---
+import Container from '../ui/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Icon from '../icons/Icon.astro';
+import { approachSteps } from '../../data/narrative';
+---
+
+<section class="approach" aria-labelledby="approach-title">
+  <Container>
+    <SectionHeading
+      id="approach-title"
+      index={6}
+      eyebrow="Nossa abordagem"
+      title="Como conduzimos um serviço de engenharia elétrica"
+      subtitle="Sem afirmar um procedimento rígido — é a forma como organizamos entendimento, planejamento, execução e acompanhamento em cada serviço."
+      align="center"
+    />
+    <ol class="approach__list">
+      {approachSteps.map((step, i) => (
+        <li class="approach__item" data-reveal>
+          <span class="approach__index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <Icon name={step.icon} size={22} class="approach__icon" />
+          <p class="approach__label">{step.label}</p>
+          <p class="approach__description">{step.description}</p>
+        </li>
+      ))}
+    </ol>
+  </Container>
+</section>
+
+<style>
+  .approach {
+    padding-block: var(--space-2xl);
+    background: var(--color-surface-alt);
+  }
+
+  .approach__list {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--space-xl);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-md);
+  }
+
+  .approach__item {
+    position: relative;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+  }
+
+  .approach__index {
+    display: block;
+    font-size: var(--fs-h3);
+    font-weight: 800;
+    color: var(--color-border);
+    margin-bottom: var(--space-sm);
+  }
+
+  .approach__item :global(.approach__icon) {
+    color: var(--color-blue-electric);
+    margin-bottom: var(--space-sm);
+  }
+
+  .approach__label {
+    font-weight: 700;
+    color: var(--color-navy);
+    margin-bottom: var(--space-3xs);
+  }
+
+  .approach__description {
+    font-size: var(--fs-small);
+    color: var(--color-gray-technical);
+  }
+
+  @media (max-width: 900px) {
+    .approach__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .approach__list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

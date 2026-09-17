@@ -1,12 +1,15 @@
 ---
 // Visual original em SVG/CSS (nenhuma foto) — um motivo geométrico de
 // "diagrama de circuito" em navy + azul elétrico, reforçando o tema de
-// engenharia elétrica sem depender de banco de imagens.
+// engenharia elétrica sem depender de banco de imagens. Camadas extras
+// (anel externo graduado, marcas de escala, rótulo de coordenada) dão
+// sensação de precisão/instrumentação técnica sem virar decoração.
 interface Props {
   class?: string;
 }
 const { class: className } = Astro.props;
 const uid = Math.random().toString(36).slice(2, 9);
+const ticks = Array.from({ length: 24 }, (_, i) => i * 15);
 ---
 
 <div class:list={['hero-visual', className]} aria-hidden="true">
@@ -23,6 +26,20 @@ const uid = Math.random().toString(36).slice(2, 9);
 
     <circle cx="280" cy="235" r="230" fill={`url(#glow-${uid})`} />
     <rect x="0" y="0" width="560" height="560" fill={`url(#grid-${uid})`} />
+
+    <!-- anel graduado externo — sensação de instrumento de precisão.
+         Coordenadas absolutas (centro 280,280) em vez de <g transform>,
+         porque a animação CSS de rotação substitui (não soma) qualquer
+         transform via atributo SVG. -->
+    <g class="dial">
+      <circle cx="280" cy="280" r="255" fill="none" stroke="#2f4a7a" stroke-width="1" stroke-dasharray="1 7" opacity="0.6" />
+      {ticks.map((deg) => (
+        <line x1="280" y1="25" x2="280" y2={deg % 90 === 0 ? 36 : 31} stroke="#5fa8ff" stroke-width="1.5"
+          opacity="0.5" transform={`rotate(${deg} 280 280)`} />
+      ))}
+      <text x="280" y="18" text-anchor="middle" font-size="9" letter-spacing="2" fill="#5fa8ff" opacity="0.55"
+        font-family="monospace">VB · 002014</text>
+    </g>
 
     <g class="circuit-lines" fill="none" stroke="#5fa8ff" stroke-width="2" stroke-linecap="round" opacity="0.55">
       <path d="M60 120 H200 V210 H280" />
@@ -81,6 +98,11 @@ const uid = Math.random().toString(36).slice(2, 9);
       animation-delay: 1.2s;
     }
 
+    .dial {
+      animation: spin 90s linear infinite;
+      transform-origin: 280px 280px;
+    }
+
     @keyframes pulse {
       0%,
       100% {
@@ -90,6 +112,12 @@ const uid = Math.random().toString(36).slice(2, 9);
       50% {
         opacity: 0.45;
         transform: scale(1.4);
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
       }
     }
   }

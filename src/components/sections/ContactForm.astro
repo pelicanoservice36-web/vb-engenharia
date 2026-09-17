@@ -4,29 +4,29 @@ import { serviceOptions } from '../../data/services';
 
 <form class="contact-form" id="contact-form" data-contact-form novalidate>
   <div class="contact-form__row">
-    <label for="cf-name">Nome</label>
+    <label for="cf-name">Nome <span aria-hidden="true">*</span></label>
     <input id="cf-name" name="name" type="text" autocomplete="name" required />
   </div>
 
   <div class="contact-form__row">
-    <label for="cf-company">Empresa</label>
+    <label for="cf-company">Empresa <span class="contact-form__optional">(opcional)</span></label>
     <input id="cf-company" name="company" type="text" autocomplete="organization" />
   </div>
 
   <div class="contact-form__grid">
     <div class="contact-form__row">
-      <label for="cf-phone">Telefone</label>
+      <label for="cf-phone">Telefone <span aria-hidden="true">*</span></label>
       <input id="cf-phone" name="phone" type="tel" autocomplete="tel" required />
     </div>
 
     <div class="contact-form__row">
-      <label for="cf-email">E-mail</label>
+      <label for="cf-email">E-mail <span aria-hidden="true">*</span></label>
       <input id="cf-email" name="email" type="email" autocomplete="email" required />
     </div>
   </div>
 
   <div class="contact-form__row">
-    <label for="cf-service">Serviço de interesse</label>
+    <label for="cf-service">Serviço de interesse <span aria-hidden="true">*</span></label>
     <select id="cf-service" name="service" required>
       <option value="" selected disabled>Selecione um serviço</option>
       {serviceOptions.map((option) => (
@@ -37,9 +37,11 @@ import { serviceOptions } from '../../data/services';
   </div>
 
   <div class="contact-form__row">
-    <label for="cf-message">Mensagem</label>
+    <label for="cf-message">Mensagem <span aria-hidden="true">*</span></label>
     <textarea id="cf-message" name="message" rows="4" required></textarea>
   </div>
+
+  <p class="contact-form__required-note">* campos obrigatórios</p>
 
   <p class="contact-form__status" role="status" aria-live="polite" data-contact-form-status hidden></p>
 
@@ -75,6 +77,21 @@ import { serviceOptions } from '../../data/services';
     color: var(--color-navy);
   }
 
+  label span[aria-hidden] {
+    color: var(--color-orange-on-light);
+  }
+
+  .contact-form__optional {
+    font-weight: 400;
+    color: var(--color-gray-technical);
+  }
+
+  .contact-form__required-note {
+    font-size: var(--fs-small);
+    color: var(--color-gray-technical);
+    margin-top: calc(-1 * var(--space-2xs));
+  }
+
   input,
   select,
   textarea {
@@ -82,12 +99,36 @@ import { serviceOptions } from '../../data/services';
     border: 1.5px solid var(--color-border);
     border-radius: var(--radius-sm);
     background: var(--color-white);
+    transition: border-color var(--duration-fast) var(--ease-standard);
   }
 
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible {
     border-color: var(--color-blue-electric);
+    outline: none;
+  }
+
+  /* Erro: só depois que o usuário interagiu (:user-invalid), não no
+     carregamento da página com campos vazios. */
+  input:user-invalid,
+  select:user-invalid,
+  textarea:user-invalid {
+    border-color: var(--color-error);
+  }
+
+  input:not(:placeholder-shown):user-valid,
+  select:user-valid,
+  textarea:not(:placeholder-shown):user-valid {
+    border-color: var(--color-success);
+  }
+
+  input:disabled,
+  select:disabled,
+  textarea:disabled {
+    background: var(--color-surface-alt);
+    color: var(--color-gray-technical);
+    cursor: not-allowed;
   }
 
   textarea {
@@ -100,8 +141,8 @@ import { serviceOptions } from '../../data/services';
     padding: 0.85rem 1.75rem;
     border-radius: var(--radius-md);
     border: none;
-    background: var(--color-blue-electric);
-    color: var(--color-white);
+    background: var(--color-orange);
+    color: var(--color-graphite);
     font-weight: 600;
     cursor: pointer;
     min-height: 48px;
@@ -109,7 +150,13 @@ import { serviceOptions } from '../../data/services';
   }
 
   .contact-form__submit:hover {
-    background: var(--color-navy-700);
+    background: var(--color-orange-light);
+  }
+
+  .contact-form__submit:disabled {
+    background: var(--color-border);
+    color: var(--color-gray-technical);
+    cursor: not-allowed;
   }
 
   .contact-form__status {
