@@ -75,9 +75,10 @@ const whatsAppUrl = buildWhatsAppUrl(defaultWhatsAppContact.phoneE164);
     position: sticky;
     top: 0;
     z-index: var(--z-header);
-    background: var(--color-navy);
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
     transition: box-shadow var(--duration-base) var(--ease-standard);
-    color: var(--color-white);
+    color: var(--color-navy);
   }
 
   .site-header[data-scrolled] {
@@ -108,12 +109,12 @@ const whatsAppUrl = buildWhatsAppUrl(defaultWhatsAppContact.phoneE164);
     text-decoration: none;
     font-weight: 500;
     font-size: var(--fs-small);
-    color: var(--color-gray-on-navy);
+    color: var(--color-gray-technical);
     transition: color var(--duration-fast) var(--ease-standard);
   }
 
   .site-header__nav a:hover {
-    color: var(--color-white);
+    color: var(--color-navy);
   }
 
   .site-header__actions {
@@ -129,8 +130,8 @@ const whatsAppUrl = buildWhatsAppUrl(defaultWhatsAppContact.phoneE164);
     width: 40px;
     height: 40px;
     border-radius: var(--radius-pill);
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--color-white);
+    background: var(--color-surface-alt);
+    color: var(--color-navy);
   }
 
   .site-header__menu-toggle {
@@ -141,7 +142,7 @@ const whatsAppUrl = buildWhatsAppUrl(defaultWhatsAppContact.phoneE164);
     height: 44px;
     background: transparent;
     border: none;
-    color: var(--color-white);
+    color: var(--color-navy);
     cursor: pointer;
   }
 
