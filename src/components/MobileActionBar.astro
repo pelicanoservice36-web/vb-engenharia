@@ -10,7 +10,7 @@ const whatsAppUrl = buildWhatsAppUrl(defaultWhatsAppContact.phoneE164);
     <Icon name="chat" size={20} />
     WhatsApp
   </a>
-  <a class="mobile-bar__link mobile-bar__link--primary" href="#contato">
+  <a class="mobile-bar__link mobile-bar__link--primary" href="/#contato">
     <Icon name="arrow-right" size={20} />
     Orçamento
   </a>
@@ -33,6 +33,12 @@ const whatsAppUrl = buildWhatsAppUrl(defaultWhatsAppContact.phoneE164);
       border-top: 1px solid var(--color-border-on-navy);
       padding-bottom: max(0px, env(safe-area-inset-bottom, 0px));
       box-shadow: var(--shadow-lg);
+    }
+
+    /* Evita duplicar WhatsApp/Orçamento na tela ao mesmo tempo que o drawer
+       do menu mobile (ver header.ts) — só um dos dois fica visível por vez. */
+    :global(body.has-mobile-nav-open) .mobile-bar {
+      display: none;
     }
   }
 

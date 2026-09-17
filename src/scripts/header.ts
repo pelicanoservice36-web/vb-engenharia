@@ -20,12 +20,17 @@ function closeMobileNav() {
   if (!menuToggle || !mobileNav) return;
   menuToggle.setAttribute('aria-expanded', 'false');
   mobileNav.hidden = true;
+  document.body.classList.remove('has-mobile-nav-open');
 }
 
 function openMobileNav() {
   if (!menuToggle || !mobileNav) return;
   menuToggle.setAttribute('aria-expanded', 'true');
   mobileNav.hidden = false;
+  // Esconde a barra fixa (MobileActionBar) enquanto o menu está aberto —
+  // sem isso, WhatsApp/Orçamento apareciam duplicados na tela ao mesmo
+  // tempo (uma vez no drawer, outra vez na barra fixa por baixo dele).
+  document.body.classList.add('has-mobile-nav-open');
 }
 
 menuToggle?.addEventListener('click', () => {
