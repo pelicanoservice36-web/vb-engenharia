@@ -79,7 +79,7 @@ Coloque os arquivos em `src/assets/images/<pasta>/` (não em `public/`) e import
 import novaFoto from '../assets/images/experience/vb-engenharia-nova-foto-descritiva.jpg';
 ```
 
-Fotos da galeria de "Experiência" seguem o padrão de nome `vb-engenharia-<descrição-do-conteúdo>.ext` (ex.: `vb-engenharia-manutencao-motor-bomba-industrial.jpg`) — bom para SEO de imagem e para manter o arquivo autoexplicativo. Evite nomes genéricos (`foto1.jpg`, `img-final.png`). Hoje só existem 2 fotos reais; a grade já está pronta para receber mais sem mudança de layout.
+Fotos da galeria de "Experiência" seguem o padrão de nome `vb-engenharia-<descrição-do-conteúdo>.ext` (ex.: `vb-engenharia-inspecao-painel-industrial.jpg`) — bom para SEO de imagem e para manter o arquivo autoexplicativo. Evite nomes genéricos (`foto1.jpg`, `img-final.png`). As 4 fotos atuais vêm de `Logo/VB-Engenharia.png` (recortadas em `src/assets/images/experience/` — ver nota abaixo); a grade já está pronta para receber mais sem mudança de layout.
 
 ## Como alterar as cores
 
@@ -151,3 +151,5 @@ O arquivo `Apresentação comercial atualizada-2026.pdf` (material comercial usa
 ## Sobre a pasta `Logo/`
 
 A pasta `Logo/` na raiz do projeto contém os arquivos originais da logo oficial fornecidos pela empresa (`VB Engenharia Logo.png`, com fundo branco, e `VB Engenharia Logo Without Background.png`, com transparência). O site usa uma versão recortada e tratada desses arquivos em `src/assets/images/logo/vb-engenharia-logo.png` — a transparência original tinha uma franja de cor nas bordas (resíduo da remoção de fundo) que foi corrigida antes do recorte. Os arquivos da pasta `Logo/` ficam guardados como fonte, caso seja necessário gerar um novo recorte no futuro.
+
+Também está em `Logo/VB-Engenharia.png` um mosaico com 4 fotos de estilo banco de imagens/gerada por IA (não são fotos de obras reais da VB), fornecido para uso na seção "Experiência" da home. Cada quadrante foi recortado individualmente para `src/assets/images/experience/` (ver `src/data/experience.ts`). Ao adicionar fotos de campo genuínas no futuro, considere substituir essas pelas reais.
