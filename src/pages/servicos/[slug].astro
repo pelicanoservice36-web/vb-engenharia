@@ -1,0 +1,234 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/sections/Header.astro';
+import Footer from '../../components/sections/Footer.astro';
+import WhatsAppButton from '../../components/WhatsAppButton.astro';
+import MobileActionBar from '../../components/MobileActionBar.astro';
+import Container from '../../components/ui/Container.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/icons/Icon.astro';
+import { serviceCategories, type ServiceCategory } from '../../data/services';
+import { buildBreadcrumbJsonLd } from '../../data/seo';
+
+export function getStaticPaths() {
+  return serviceCategories.map((category) => ({
+    params: { slug: category.id },
+    props: { category },
+  }));
+}
+
+interface Props {
+  category: ServiceCategory;
+}
+
+const { category } = Astro.props;
+const otherCategories = serviceCategories.filter((c) => c.id !== category.id);
+
+const breadcrumbJsonLd = buildBreadcrumbJsonLd(Astro.site, [
+  { name: 'Início', path: '/' },
+  { name: 'Serviços', path: '/servicos/' },
+  { name: category.title, path: `/servicos/${category.id}/` },
+]);
+---
+
+<BaseLayout title={category.title} description={category.description}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <Header />
+  <main id="main-content">
+    <section class="service-hero">
+      <Container>
+        <nav class="breadcrumb" aria-label="Trilha de navegação">
+          <a href="/">Início</a>
+          <span aria-hidden="true">/</span>
+          <a href="/servicos/">Serviços</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{category.title}</span>
+        </nav>
+        <SectionHeading eyebrow="Serviços" title={category.title} subtitle={category.description} tone="on-dark" />
+      </Container>
+    </section>
+
+    <section class="service-body">
+      <Container>
+        <div class="service-body__grid">
+          <ul class="service-body__list">
+            {category.items.map((item) => (
+              <li>
+                <Icon name="check" size={18} />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+          <aside class="service-body__cta">
+            <div class="service-body__icon">
+              <Icon name={category.icon} size={40} />
+            </div>
+            <p>Precisa desse serviço para o seu projeto?</p>
+            <Button href="/#contato" variant="primary">Solicitar orçamento</Button>
+          </aside>
+        </div>
+      </Container>
+    </section>
+
+    <section class="service-others" aria-labelledby="service-others-title">
+      <Container>
+        <p class="service-others__heading" id="service-others-title">Outros serviços</p>
+        <ul class="service-others__list">
+          {otherCategories.map((c) => (
+            <li>
+              <a href={`/servicos/${c.id}/`}>
+                <Icon name={c.icon} size={18} />
+                <span>{c.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </Container>
+    </section>
+  </main>
+  <Footer />
+  <WhatsAppButton />
+  <MobileActionBar />
+</BaseLayout>
+
+<style>
+  .service-hero {
+    background: var(--color-navy);
+    padding-block: var(--space-xl) var(--space-2xl);
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    font-size: var(--fs-small);
+    color: var(--color-gray-on-navy);
+    margin-bottom: var(--space-lg);
+  }
+
+  .breadcrumb a {
+    color: var(--color-gray-on-navy);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-white);
+    text-decoration: underline;
+  }
+
+  .breadcrumb [aria-current='page'] {
+    color: var(--color-white);
+    font-weight: 600;
+  }
+
+  .service-body {
+    padding-block: var(--space-2xl);
+    background: var(--color-surface);
+  }
+
+  .service-body__grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  .service-body__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    list-style: none;
+    padding: 0;
+  }
+
+  .service-body__list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-xs);
+    font-size: var(--fs-lead);
+    color: var(--color-graphite);
+  }
+
+  .service-body__list :global(svg) {
+    color: var(--color-blue-electric);
+    flex-shrink: 0;
+    margin-top: 0.3rem;
+  }
+
+  .service-body__cta {
+    background: var(--color-surface-alt);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    text-align: center;
+  }
+
+  .service-body__icon {
+    width: 64px;
+    height: 64px;
+    margin-inline: auto;
+    margin-bottom: var(--space-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-blue-electric);
+  }
+
+  .service-body__cta p {
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+  }
+
+  .service-body__cta :global(.btn) {
+    width: 100%;
+  }
+
+  .service-others {
+    padding-block: var(--space-xl) var(--space-2xl);
+    background: var(--color-surface-alt);
+  }
+
+  .service-others__heading {
+    font-size: var(--fs-eyebrow);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-gray-technical);
+    margin-bottom: var(--space-md);
+  }
+
+  .service-others__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    list-style: none;
+    padding: 0;
+  }
+
+  .service-others__list a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-navy);
+    font-weight: 600;
+    font-size: var(--fs-small);
+    text-decoration: none;
+  }
+
+  .service-others__list a:hover {
+    border-color: var(--color-blue-electric);
+    color: var(--color-blue-electric);
+  }
+
+  @media (max-width: 800px) {
+    .service-body__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

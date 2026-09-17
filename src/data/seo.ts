@@ -61,3 +61,22 @@ export function buildJsonLd(site: URL | undefined) {
     '@graph': [organization, website, ...services],
   };
 }
+
+/**
+ * BreadcrumbList para páginas internas (ex.: /servicos/[slug]). Só faz
+ * sentido a partir do momento em que existe mais de uma página navegável —
+ * por isso não faz parte do @graph de buildJsonLd(), usado em toda página.
+ */
+export function buildBreadcrumbJsonLd(site: URL | undefined, trail: Array<{ name: string; path: string }>) {
+  const siteUrl = site?.toString().replace(/\/$/, '') ?? '';
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: trail.map((step, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: step.name,
+      item: `${siteUrl}${step.path}`,
+    })),
+  };
+}

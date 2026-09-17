@@ -1,0 +1,171 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/sections/Header.astro';
+import Footer from '../../components/sections/Footer.astro';
+import WhatsAppButton from '../../components/WhatsAppButton.astro';
+import MobileActionBar from '../../components/MobileActionBar.astro';
+import Container from '../../components/ui/Container.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Icon from '../../components/icons/Icon.astro';
+import { serviceCategories } from '../../data/services';
+import { buildBreadcrumbJsonLd } from '../../data/seo';
+
+const breadcrumbJsonLd = buildBreadcrumbJsonLd(Astro.site, [
+  { name: 'Início', path: '/' },
+  { name: 'Serviços', path: '/servicos/' },
+]);
+---
+
+<BaseLayout
+  title="Serviços de Engenharia Elétrica"
+  description="Projetos, instalações, manutenção, segurança e conformidade, automação e energia — conheça cada frente de atuação da VB Engenharia."
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <Header />
+  <main id="main-content">
+    <section class="services-hero">
+      <Container>
+        <nav class="breadcrumb" aria-label="Trilha de navegação">
+          <a href="/">Início</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">Serviços</span>
+        </nav>
+        <SectionHeading
+          eyebrow="Serviços"
+          title="Soluções completas em engenharia elétrica"
+          subtitle="Da elaboração do projeto à execução, manutenção e adequação das instalações, para os segmentos industrial, comercial e predial."
+          tone="on-dark"
+        />
+      </Container>
+    </section>
+
+    <section class="services-grid">
+      <Container>
+        <ul class="services-grid__list">
+          {serviceCategories.map((category, i) => (
+            <li>
+              <a href={`/servicos/${category.id}/`} class="service-card">
+                <span class="service-card__index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                <div class="service-card__icon">
+                  <Icon name={category.icon} size={32} />
+                </div>
+                <h3>{category.title}</h3>
+                <p>{category.description}</p>
+                <span class="service-card__link">
+                  Conhecer <Icon name="arrow-right" size={16} />
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </Container>
+    </section>
+  </main>
+  <Footer />
+  <WhatsAppButton />
+  <MobileActionBar />
+</BaseLayout>
+
+<style>
+  .services-hero {
+    background: var(--color-navy);
+    padding-block: var(--space-xl) var(--space-2xl);
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    font-size: var(--fs-small);
+    color: var(--color-gray-on-navy);
+    margin-bottom: var(--space-lg);
+  }
+
+  .breadcrumb a {
+    color: var(--color-gray-on-navy);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-white);
+    text-decoration: underline;
+  }
+
+  .breadcrumb [aria-current='page'] {
+    color: var(--color-white);
+    font-weight: 600;
+  }
+
+  .services-grid {
+    padding-block: var(--space-2xl);
+    background: var(--color-surface);
+  }
+
+  .services-grid__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-lg);
+    list-style: none;
+    padding: 0;
+  }
+
+  .service-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    height: 100%;
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color var(--duration-base) var(--ease-standard),
+      transform var(--duration-base) var(--ease-standard);
+  }
+
+  .service-card:hover {
+    border-color: var(--color-blue-electric);
+    transform: translateY(-2px);
+  }
+
+  .service-card__index {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    font-family: monospace;
+    font-size: var(--fs-small);
+    font-weight: 700;
+    color: var(--color-gray-technical);
+  }
+
+  .service-card__icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-blue-electric);
+  }
+
+  .service-card h3 {
+    font-size: var(--fs-h3);
+  }
+
+  .service-card p {
+    color: var(--color-gray-technical);
+    font-size: var(--fs-small);
+    flex-grow: 1;
+  }
+
+  .service-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    font-weight: 600;
+    color: var(--color-blue-electric);
+  }
+</style>

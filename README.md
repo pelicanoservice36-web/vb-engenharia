@@ -47,7 +47,7 @@ src/
 public/                  # favicon, robots.txt, sitemap gerado, og-image, manifest
 ```
 
-O site hoje é uma página única (`/`), mas a estrutura já está modular o bastante para no futuro virar páginas próprias sem precisar reescrever o conteúdo — os dados de `src/data/services.ts` já estão organizados por categoria para isso. Candidatas a página própria mais adiante: `/empresa`, `/servicos`, `/servicos/projetos-eletricos`, `/servicos/instalacoes-eletricas`, `/servicos/manutencao-eletrica`, `/servicos/painel-eletrico`, `/servicos/spda`, `/servicos/subestacoes`, `/servicos/grupos-geradores`, `/servicos/automacao-industrial`, `/servicos/laudos`, `/contato`. Nenhuma dessas rotas existe ainda — só a arquitetura já permite criá-las sem retrabalho. Quando existir mais de uma página navegável, vale adicionar `BreadcrumbList` ao JSON-LD (`src/data/seo.ts`) — hoje isso não é feito de propósito, porque com uma página só seria um dado fabricado.
+O site hoje é majoritariamente uma página única (`/`), mas já existem páginas próprias de serviço em `/servicos/` (`src/pages/servicos/index.astro` e `src/pages/servicos/[slug].astro`), geradas automaticamente a partir das 5 categorias de `src/data/services.ts` via `getStaticPaths()` — nenhum conteúdo novo, é o mesmo dado já usado nas tabs da home. Cada página de serviço tem `title`/`description` próprios, breadcrumb visual e `BreadcrumbList` (JSON-LD) apontando Início → Serviços → categoria (`buildBreadcrumbJsonLd` em `src/data/seo.ts`). Candidatas a página própria mais adiante, quando fizer sentido desmembrar por serviço individual (hoje agrupados nas 5 categorias): `/servicos/projetos-eletricos`, `/servicos/subestacoes`, `/servicos/spda`, `/servicos/grupos-geradores`, `/servicos/laudos`, `/empresa`, `/contato`.
 
 ### Componente `TabAccordion`
 
@@ -68,7 +68,7 @@ Todo o texto e os dados estruturados ficam em `src/data/*.ts`, nunca direto nos 
 | Logos de clientes | `src/data/clients.ts` |
 | Contatos (telefone, e-mail, WhatsApp) | `src/data/contacts.ts` |
 | Menu de navegação | `src/data/nav.ts` |
-| Título/descrição padrão e JSON-LD (Schema.org, `@graph` com Organization/WebSite/Service) | `src/data/seo.ts` |
+| Título/descrição padrão e JSON-LD (Schema.org, `@graph` com Organization/WebSite/Service, e `BreadcrumbList` das páginas de serviço) | `src/data/seo.ts` |
 
 ## Como trocar imagens
 
@@ -76,8 +76,10 @@ Coloque os arquivos em `src/assets/images/<pasta>/` (não em `public/`) e import
 
 ```ts
 // src/data/experience.ts
-import novaFoto from '../assets/images/experience/nova-foto.jpg';
+import novaFoto from '../assets/images/experience/vb-engenharia-nova-foto-descritiva.jpg';
 ```
+
+Fotos da galeria de "Experiência" seguem o padrão de nome `vb-engenharia-<descrição-do-conteúdo>.ext` (ex.: `vb-engenharia-manutencao-motor-bomba-industrial.jpg`) — bom para SEO de imagem e para manter o arquivo autoexplicativo. Evite nomes genéricos (`foto1.jpg`, `img-final.png`). Hoje só existem 2 fotos reais; a grade já está pronta para receber mais sem mudança de layout.
 
 ## Como alterar as cores
 

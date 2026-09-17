@@ -1,6 +1,6 @@
 import type { ImageMetadata } from 'astro';
-import motorBomba from '../assets/images/experience/manutencao-motor-bomba-industrial.jpg';
-import testeCabine from '../assets/images/experience/teste-isolamento-cabine-media-tensao.jpg';
+import motorBomba from '../assets/images/experience/vb-engenharia-manutencao-motor-bomba-industrial.jpg';
+import testeCabine from '../assets/images/experience/vb-engenharia-teste-isolamento-cabine-media-tensao.jpg';
 
 export interface ExperiencePhoto {
   id: string;

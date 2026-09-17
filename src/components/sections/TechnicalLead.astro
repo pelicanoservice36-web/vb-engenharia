@@ -1,13 +1,19 @@
 ---
-// Bloco do responsável técnico. Sem foto — não existe uma foto profissional
-// documentada para usar, e o briefing é explícito em não inventar biografia.
-// O placeholder fica pronto para receber uma foto real no futuro.
+// Bloco do responsável técnico. Sem fotografia real disponível — em vez de um
+// placeholder tipo "foto em breve", usamos um monograma decorativo (não
+// finge ser uma foto: fica aria-hidden, o nome já está no <h3> ao lado).
 import { technicalLead } from '../../data/company';
+
+const initials = technicalLead.name
+  .split(' ')
+  .map((part) => part[0])
+  .join('');
 ---
 
 <div class="technical-lead">
-  <div class="technical-lead__photo" role="img" aria-label={`Foto de ${technicalLead.name} (a adicionar)`}>
-    <span aria-hidden="true">Foto em breve</span>
+  <div class="technical-lead__badge" aria-hidden="true">
+    <span class="technical-lead__ring"></span>
+    <span class="technical-lead__initials">{initials}</span>
   </div>
   <div class="technical-lead__body">
     <p class="technical-lead__eyebrow">Responsável técnico</p>
@@ -33,19 +39,32 @@ import { technicalLead } from '../../data/company';
     padding: var(--space-lg);
   }
 
-  .technical-lead__photo {
+  .technical-lead__badge {
+    position: relative;
     width: 120px;
     height: 120px;
     border-radius: var(--radius-pill);
-    background: var(--color-navy);
-    color: var(--color-gray-on-navy);
+    background: linear-gradient(155deg, var(--color-navy) 0%, #0d264f 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    font-size: var(--fs-small);
     flex-shrink: 0;
-    border: 2px dashed var(--color-border-on-navy);
+  }
+
+  .technical-lead__ring {
+    position: absolute;
+    inset: 8px;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--color-orange);
+    opacity: 0.6;
+  }
+
+  .technical-lead__initials {
+    font-family: var(--font-mono, monospace);
+    font-size: 2.25rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--color-white);
   }
 
   .technical-lead__eyebrow {
