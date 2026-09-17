@@ -153,3 +153,11 @@ O arquivo `Apresentação comercial atualizada-2026.pdf` (material comercial usa
 A pasta `Logo/` na raiz do projeto contém os arquivos originais da logo oficial fornecidos pela empresa (`VB Engenharia Logo.png`, com fundo branco, e `VB Engenharia Logo Without Background.png`, com transparência). O site usa uma versão recortada e tratada desses arquivos em `src/assets/images/logo/vb-engenharia-logo.png` — a transparência original tinha uma franja de cor nas bordas (resíduo da remoção de fundo) que foi corrigida antes do recorte. Os arquivos da pasta `Logo/` ficam guardados como fonte, caso seja necessário gerar um novo recorte no futuro.
 
 Também está em `Logo/VB-Engenharia.png` um mosaico com 4 fotos de estilo banco de imagens/gerada por IA (não são fotos de obras reais da VB), fornecido para uso na seção "Experiência" da home. Cada quadrante foi recortado individualmente para `src/assets/images/experience/` (ver `src/data/experience.ts`). Ao adicionar fotos de campo genuínas no futuro, considere substituir essas pelas reais.
+
+## Vídeo do Hero
+
+`Video/Video-VB-Engenharia.mp4` é o vídeo institucional original fornecido pela empresa (mostra um técnico com o uniforme oficial da VB Engenharia). Ele é recodificado para web e guardado em `public/videos/vb-engenharia-hero.mp4` (sem faixa de áudio — o vídeo toca mudo — e reduzido para 960px de largura, ~520KB). O poster (primeiro frame) é gerado a partir desse mesmo arquivo e otimizado via `astro:assets` em `src/components/sections/HeroVisual.astro`.
+
+Vídeos não passam pelo pipeline de otimização de imagens do Astro — por isso ficam em `public/`, servidos como arquivo estático, em vez de `src/assets/`. Para trocar o vídeo, recodifique o novo arquivo (recomendado: sem áudio, ~960px de largura, H.264, `faststart`) e substitua `public/videos/vb-engenharia-hero.mp4`, depois gere um novo poster a partir do primeiro frame.
+
+O `<video>` nunca tem `autoplay` no HTML: `src/scripts/hero-video.ts` só chama `.play()` se `prefers-reduced-motion` não estiver ativo — sem JS, ou com essa preferência, ele fica parado no poster.
