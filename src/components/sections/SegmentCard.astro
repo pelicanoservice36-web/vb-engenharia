@@ -41,13 +41,13 @@ const relatedServices = serviceCategories.filter((s) => segment.relatedServiceId
 <style>
   .segment-row {
     display: grid;
-    grid-template-columns: 0.85fr 1.15fr;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
     gap: var(--space-xl);
     align-items: center;
   }
 
   .segment-row--reverse {
-    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   }
 
   .segment-row--reverse .segment-row__visual {
@@ -122,7 +122,7 @@ const relatedServices = serviceCategories.filter((s) => segment.relatedServiceId
   @media (max-width: 800px) {
     .segment-row,
     .segment-row--reverse {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .segment-row--reverse .segment-row__visual {

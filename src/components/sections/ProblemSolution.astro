@@ -43,12 +43,13 @@ import { problemSolution } from '../../data/narrative';
     padding: 0;
     margin-top: var(--space-2xl);
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: var(--space-sm);
   }
 
   .chain__step {
     position: relative;
+    min-width: 0;
     text-align: center;
     padding-inline: var(--space-xs);
   }

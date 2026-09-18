@@ -61,7 +61,7 @@ const photos = await Promise.all(
   .experience__grid {
     margin-top: var(--space-xl);
     display: grid;
-    grid-template-columns: 1.3fr 1fr;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
     gap: var(--space-md);
   }
 
@@ -168,7 +168,7 @@ const photos = await Promise.all(
 
   @media (max-width: 700px) {
     .experience__grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .experience__item--large {

@@ -25,6 +25,11 @@ const { differential, index } = Astro.props;
     display: flex;
     gap: var(--space-md);
     align-items: flex-start;
+    min-width: 0;
+  }
+
+  .differential > div {
+    min-width: 0;
   }
 
   .differential__icon {

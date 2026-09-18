@@ -24,7 +24,7 @@ const whatsAppUrl = buildWhatsAppUrl(defaultWhatsAppContact.phoneE164);
   @media (max-width: 900px) {
     .mobile-bar {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       position: fixed;
       inset-inline: 0;
       bottom: 0;
@@ -46,6 +46,7 @@ const whatsAppUrl = buildWhatsAppUrl(defaultWhatsAppContact.phoneE164);
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 0;
     gap: var(--space-2xs);
     padding: var(--space-sm);
     min-height: var(--mobile-bar-height);

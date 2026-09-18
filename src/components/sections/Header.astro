@@ -96,6 +96,13 @@ const whatsAppUrl = buildWhatsAppUrl(defaultWhatsAppContact.phoneE164);
   .site-header__brand {
     display: flex;
     align-items: center;
+    min-width: 0;
+    flex-shrink: 1;
+  }
+
+  .site-header__brand :global(img) {
+    max-width: 100%;
+    height: auto;
   }
 
   .site-header__nav ul {
