@@ -33,19 +33,19 @@ import { differentials } from '../../data/company';
   .differentials__grid {
     margin-top: var(--space-xl);
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--space-lg) var(--space-md);
   }
 
   @media (max-width: 900px) {
     .differentials__grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
   @media (max-width: 600px) {
     .differentials__grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

@@ -129,7 +129,7 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd(Astro.site, [
 
   .service-body__grid {
     display: grid;
-    grid-template-columns: 1fr 320px;
+    grid-template-columns: minmax(0, 1fr) 320px;
     gap: var(--space-xl);
     align-items: start;
   }
@@ -228,7 +228,7 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd(Astro.site, [
 
   @media (max-width: 800px) {
     .service-body__grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

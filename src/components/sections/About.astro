@@ -34,7 +34,7 @@ import { about } from '../../data/company';
   .about__inner {
     margin-top: var(--space-xl);
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
     align-items: center;
     gap: var(--space-xl);
   }
@@ -49,7 +49,7 @@ import { about } from '../../data/company';
 
   @media (max-width: 900px) {
     .about__inner {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     :global(.about__visual) {
