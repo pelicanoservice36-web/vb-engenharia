@@ -6,19 +6,9 @@ import Icon from '../icons/Icon.astro';
 import { experiencePhotos } from '../../data/experience';
 
 const photos = await Promise.all(
-  experiencePhotos.map(async (photo, i) => {
+  experiencePhotos.map(async (photo) => {
     const full = await getImage({ src: photo.image, width: 1600, format: 'webp' });
-    // Largura/altura pedidas ao <Image> sempre na proporção real do arquivo-fonte
-    // (todas as fotos atuais são paisagem, ~1.79:1) — pedir uma altura que não bate
-    // com essa proporção faz o Astro ampliar a imagem além da resolução original
-    // para cobrir a caixa, deixando o recorte borrado (era o caso do item "grande",
-    // antes forçado num box retrato 3:4).
-    // Grid de 2 colunas (1.3fr/1fr): índices pares caem na coluna larga,
-    // ímpares na estreita — pedir a largura errada para uma foto que cai na
-    // coluna larga forçava upscaling além da resolução do arquivo-fonte.
-    const displayWidth = i % 2 === 0 ? 900 : 640;
-    const displayHeight = Math.round(displayWidth / (photo.image.width / photo.image.height));
-    return { ...photo, fullSrc: full.src, displayWidth, displayHeight };
+    return { ...photo, fullSrc: full.src };
   })
 );
 ---
@@ -43,7 +33,7 @@ const photos = await Promise.all(
             data-lightbox-caption={photo.caption}
             aria-label={`Ampliar foto: ${photo.caption}`}
           >
-            <Image src={photo.image} alt={photo.alt} width={photo.displayWidth} height={photo.displayHeight} />
+            <Image src={photo.image} alt={photo.alt} width={photo.image.width} height={photo.image.height} />
           </a>
           <figcaption>{photo.caption}</figcaption>
         </figure>
@@ -72,20 +62,21 @@ const photos = await Promise.all(
     margin-top: var(--space-xl);
     display: grid;
     grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    /* Altura de linha compartilhada entre as duas colunas — com aspect-ratio
+       independente por item, a coluna mais larga (1.3fr) calculava uma altura
+       maior que a coluna estreita (1fr) na mesma linha, deixando um vão vazio
+       desalinhado sob a foto mais curta antes da próxima linha começar. */
+    grid-auto-rows: clamp(220px, 24vw, 400px);
     gap: var(--space-md);
   }
 
   .experience__item {
     position: relative;
+    height: 100%;
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
-    aspect-ratio: 4 / 3;
   }
-
-  /* Sem aspect-ratio próprio: as 4 fotos atuais são todas paisagem, então o
-     item "grande" já fica maior naturalmente por estar na coluna mais larga
-     (1.3fr) — um recorte retrato aqui exigiria cortar demais das laterais. */
 
   .experience__item a {
     display: block;
@@ -179,6 +170,15 @@ const photos = await Promise.all(
   @media (max-width: 700px) {
     .experience__grid {
       grid-template-columns: minmax(0, 1fr);
+      grid-auto-rows: auto;
+    }
+
+    /* Uma só coluna: não há mais duas larguras diferentes disputando a
+       mesma linha, então volta a usar aspect-ratio por item sem risco de
+       descompasso. */
+    .experience__item {
+      height: auto;
+      aspect-ratio: 4 / 3;
     }
   }
 </style>
