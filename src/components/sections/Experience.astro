@@ -25,7 +25,7 @@ const photos = await Promise.all(
     />
     <div class="experience__grid">
       {photos.map((photo, i) => (
-        <figure class:list={['experience__item', i === 0 && 'experience__item--large']} data-reveal>
+        <figure class="experience__item" data-reveal>
           <a
             href={photo.fullSrc}
             data-lightbox-trigger
@@ -61,11 +61,11 @@ const photos = await Promise.all(
   .experience__grid {
     margin-top: var(--space-xl);
     display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-    /* Altura de linha compartilhada entre as duas colunas — com aspect-ratio
-       independente por item, a coluna mais larga (1.3fr) calculava uma altura
-       maior que a coluna estreita (1fr) na mesma linha, deixando um vão vazio
-       desalinhado sob a foto mais curta antes da próxima linha começar. */
+    /* Colunas iguais — com pesos diferentes (ex.: 1.3fr/1fr) as fotos da
+       coluna mais larga ficavam maiores que as da coluna estreita mesmo com
+       a mesma altura de linha. Altura de linha compartilhada entre as
+       colunas evita o descompasso visto antes com aspect-ratio por item. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-auto-rows: clamp(220px, 24vw, 400px);
     gap: var(--space-md);
   }
