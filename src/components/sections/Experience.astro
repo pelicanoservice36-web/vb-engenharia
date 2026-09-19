@@ -6,9 +6,19 @@ import Icon from '../icons/Icon.astro';
 import { experiencePhotos } from '../../data/experience';
 
 const photos = await Promise.all(
-  experiencePhotos.map(async (photo) => {
+  experiencePhotos.map(async (photo, i) => {
     const full = await getImage({ src: photo.image, width: 1600, format: 'webp' });
-    return { ...photo, fullSrc: full.src };
+    // Largura/altura pedidas ao <Image> sempre na proporção real do arquivo-fonte
+    // (todas as fotos atuais são paisagem, ~1.79:1) — pedir uma altura que não bate
+    // com essa proporção faz o Astro ampliar a imagem além da resolução original
+    // para cobrir a caixa, deixando o recorte borrado (era o caso do item "grande",
+    // antes forçado num box retrato 3:4).
+    // Grid de 2 colunas (1.3fr/1fr): índices pares caem na coluna larga,
+    // ímpares na estreita — pedir a largura errada para uma foto que cai na
+    // coluna larga forçava upscaling além da resolução do arquivo-fonte.
+    const displayWidth = i % 2 === 0 ? 900 : 640;
+    const displayHeight = Math.round(displayWidth / (photo.image.width / photo.image.height));
+    return { ...photo, fullSrc: full.src, displayWidth, displayHeight };
   })
 );
 ---
@@ -33,7 +43,7 @@ const photos = await Promise.all(
             data-lightbox-caption={photo.caption}
             aria-label={`Ampliar foto: ${photo.caption}`}
           >
-            <Image src={photo.image} alt={photo.alt} width={i === 0 ? 900 : 640} height={i === 0 ? 1000 : 640} />
+            <Image src={photo.image} alt={photo.alt} width={photo.displayWidth} height={photo.displayHeight} />
           </a>
           <figcaption>{photo.caption}</figcaption>
         </figure>
@@ -73,9 +83,9 @@ const photos = await Promise.all(
     aspect-ratio: 4 / 3;
   }
 
-  .experience__item--large {
-    aspect-ratio: 3 / 4;
-  }
+  /* Sem aspect-ratio próprio: as 4 fotos atuais são todas paisagem, então o
+     item "grande" já fica maior naturalmente por estar na coluna mais larga
+     (1.3fr) — um recorte retrato aqui exigiria cortar demais das laterais. */
 
   .experience__item a {
     display: block;
@@ -169,10 +179,6 @@ const photos = await Promise.all(
   @media (max-width: 700px) {
     .experience__grid {
       grid-template-columns: 1fr;
-    }
-
-    .experience__item--large {
-      aspect-ratio: 4 / 3;
     }
   }
 </style>
