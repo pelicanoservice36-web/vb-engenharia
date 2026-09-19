@@ -1,6 +1,6 @@
 # VB Engenharia — Site institucional
 
-Site institucional da VB Engenharia (engenharia elétrica industrial, comercial e predial), construído com [Astro](https://astro.build) + TypeScript, 100% estático, sem backend, pronto para deploy no Cloudflare Pages.
+Site institucional da VB Engenharia (engenharia elétrica industrial, comercial e predial), construído com [Astro](https://astro.build) + TypeScript, com saída estática (`output: 'static'`, sem servidor renderizando páginas), pronto para deploy no Cloudflare. O único código de servidor do projeto é um Worker minúsculo e opcional (`worker/contact-worker.ts`) que atende só o envio do formulário de contato — ver "Integrando o formulário de contato" abaixo; todas as páginas continuam arquivos estáticos.
 
 Todo o conteúdo institucional (missão, visão, valores, serviços, diferenciais e contatos) vem exclusivamente do material comercial oficial da empresa — nada foi inventado (endereço, certificações, número de clientes/projetos e avaliações não estão documentados na fonte e por isso não aparecem no site).
 
@@ -98,12 +98,21 @@ O `astro.config.ts` usa um domínio placeholder (`https://www.vbengenharia.com.b
 
 ## Integrando o formulário de contato
 
-O formulário (`src/components/sections/ContactForm.astro` + `src/scripts/contact-form.ts`) já está completo em HTML, validação client-side e acessibilidade, mas **não envia dados para nenhum lugar** — como o site não tem backend, isso seria simular um envio que não acontece. Hoje, ao enviar, o usuário vê uma mensagem transparente orientando a usar WhatsApp/telefone/e-mail.
+O formulário (`src/components/sections/ContactForm.astro` + `src/scripts/contact-form.ts`) envia um POST para `/api/contato`, atendido por `worker/contact-worker.ts` — um Worker customizado que roda **na frente** dos arquivos estáticos (configurado via `main` + `assets.run_worker_first` em `wrangler.jsonc`, restrito a essa única rota; toda outra URL continua servida como arquivo estático puro, sem passar pelo Worker).
 
-Para ativar o envio de verdade, algumas opções sem precisar de servidor próprio:
+Importante: isso **não é** uma "Cloudflare Pages Function" (recurso do Cloudflare Pages clássico, com pasta `functions/`) — este projeto usa o fluxo "Workers com Static Assets", que tem seu próprio jeito de adicionar uma rota dinâmica (um único script apontado por `main`, não uma pasta de arquivos por rota).
 
-- **[Formspree](https://formspree.io/)** ou **[Web3Forms](https://web3forms.com/)**: troque a lógica de `contact-form.ts` por um `fetch()` para o endpoint deles.
-- **Cloudflare Pages Functions**: crie `functions/api/contact.ts` no projeto e faça o `fetch('/api/contact', ...)` a partir do mesmo script.
+O Worker usa a API da [Resend](https://resend.com/) para enviar o e-mail. Sem as duas secrets abaixo configuradas, o endpoint responde `503` de propósito e o formulário mostra a mesma mensagem honesta de sempre ("ainda não está conectado a um sistema de envio") — nada finge que o envio funcionou.
+
+**Para ativar o envio de verdade:**
+
+1. Crie uma conta gratuita em [resend.com](https://resend.com/) e gere uma API key.
+2. Configure as secrets no Worker (pelo dashboard da Cloudflare, aba do Worker → Settings → Variables and Secrets, ou via `wrangler secret put`):
+   - `RESEND_API_KEY` — a chave gerada no passo 1
+   - `CONTACT_TO_EMAIL` — o e-mail que deve receber os contatos (ex.: `vbengenharia.bueno@gmail.com`)
+3. Enquanto o domínio de envio não for verificado na Resend, o remetente `onboarding@resend.dev` só consegue entregar e-mails para o **próprio endereço de e-mail da conta Resend** (limite de teste da plataforma, não deste código). Para enviar para qualquer destinatário (o `CONTACT_TO_EMAIL` real da empresa), verifique um domínio próprio na Resend e troque o `from` em `worker/contact-worker.ts` por um endereço desse domínio.
+
+Nenhum passo acima pode ser feito por aqui automaticamente — exigem login na conta Cloudflare/Resend do cliente.
 
 ## Analytics (a configurar)
 
@@ -116,33 +125,36 @@ Nenhum ID de Google Analytics/GTM/Search Console foi adicionado (evitar IDs fict
 
 O projeto está pronto tanto para **Cloudflare Pages** (clássico) quanto para **Cloudflare Workers com Static Assets** (o fluxo unificado mais recente do dashboard da Cloudflare, que gera URLs `*.workers.dev`).
 
-### Cloudflare Pages
+### Cloudflare Workers (Static Assets) — fluxo usado por este projeto
 
-1. Suba o repositório no GitHub.
-2. No Cloudflare Pages, conecte o repositório.
-3. Configure o build:
-   - **Build command:** `npm run build`
-   - **Output directory:** `dist`
-4. Nenhuma variável de ambiente é necessária (site 100% estático).
-
-### Cloudflare Workers (Static Assets)
-
-Se o dashboard te levar para o fluxo de **Workers** em vez de Pages (URL final `*.workers.dev`), o arquivo `wrangler.jsonc` na raiz do projeto já configura o Worker para servir a pasta `dist/` como assets estáticos puros, sem nenhuma lógica de servidor:
+O deploy real deste projeto (URL `*.workers.dev`) usa o fluxo **Workers com Static Assets**, configurado pelo `wrangler.jsonc` na raiz:
 
 ```jsonc
 {
   "name": "vb-engenharia",
   "compatibility_date": "2026-09-01",
-  "assets": { "directory": "./dist" }
+  "main": "worker/contact-worker.ts",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/contato"]
+  }
 }
 ```
 
-Isso é necessário porque, sem esse arquivo, o Cloudflare pode presumir que um projeto Astro precisa rodar em modo servidor (SSR) — o que quebra as imagens otimizadas por `astro:assets`, já que elas passam a depender de um endpoint `/_image` em tempo de execução que não existe num deploy estático. Configure o build/deploy como:
+- `assets.directory` serve a pasta `dist/` gerada pelo build como arquivos estáticos puros — sem isso (ou sem `wrangler.jsonc` de forma alguma), o Cloudflare pode presumir que um projeto Astro precisa rodar em modo servidor (SSR), o que quebra as imagens otimizadas por `astro:assets` (elas dependeriam de um endpoint `/_image` que não existe num deploy estático).
+- `main` + `assets.run_worker_first` adicionam o único código de servidor do projeto (`worker/contact-worker.ts`, o envio do formulário de contato — ver seção própria abaixo) só na rota `/api/contato`; qualquer outra URL nunca passa pelo Worker.
+
+Configure o build/deploy como:
 
 - **Build command:** `npm run build`
 - **Deploy command:** `npx wrangler deploy`
 
-Todo push na branch de produção gera um novo deploy automaticamente, nos dois fluxos.
+Todo push na branch de produção gera um novo deploy automaticamente.
+
+### Cloudflare Pages (clássico) — alternativa sem o formulário funcional
+
+Também é possível publicar como um projeto Pages "puro" (**Build command:** `npm run build`, **Output directory:** `dist`), mas o `worker/contact-worker.ts` deste repositório **não roda nesse fluxo** — Pages clássico usa Pages Functions (pasta `functions/`), um mecanismo diferente. Sem adaptar o envio do formulário para esse formato, ele ficaria sempre no estado "não configurado" (o que ainda é seguro: nunca finge que enviou algo).
 
 ## Observação sobre o PDF de origem
 

@@ -1,14 +1,19 @@
 {
   // Este projeto é um site 100% estático (astro.config.ts tem output: 'static',
-  // sem adapter). Este arquivo diz ao Cloudflare Workers para servir a pasta
-  // `dist/` gerada pelo `npm run build` como arquivos estáticos puros — sem
-  // isso, o deploy no Workers pode assumir modo servidor (SSR) por padrão
-  // para projetos Astro, o que quebra as imagens otimizadas por astro:assets
-  // (elas passam a depender de um endpoint /_image em tempo de execução que
-  // não existe num deploy estático).
+  // sem adapter) — a home e as páginas de serviço continuam servidas como
+  // arquivos estáticos puros. `main` adiciona um único script customizado
+  // (worker/contact-worker.ts) só para o endpoint /api/contato do
+  // formulário de contato; `run_worker_first` restrito a esse caminho
+  // garante que nenhuma outra rota passe pelo Worker (mesmo motivo de
+  // antes: sem isso, ou com o Worker rodando em toda rota, o Astro pode
+  // presumir modo servidor e quebrar as imagens otimizadas por astro:assets,
+  // que dependem de um endpoint /_image inexistente num deploy estático).
   "name": "vb-engenharia",
   "compatibility_date": "2026-09-01",
+  "main": "worker/contact-worker.ts",
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/contato"]
   }
 }

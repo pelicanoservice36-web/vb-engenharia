@@ -2,7 +2,14 @@
 import { serviceOptions } from '../../data/services';
 ---
 
-<form class="contact-form" id="contact-form" data-contact-form novalidate>
+<form
+  class="contact-form"
+  id="contact-form"
+  data-contact-form
+  method="post"
+  action="/api/contato"
+  novalidate
+>
   <div class="contact-form__row">
     <label for="cf-name">Nome <span aria-hidden="true">*</span></label>
     <input id="cf-name" name="name" type="text" autocomplete="name" required />
@@ -166,9 +173,20 @@ import { serviceOptions } from '../../data/services';
     font-size: var(--fs-small);
     background: var(--color-surface-alt);
     border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-border);
     border-radius: var(--radius-sm);
     padding: var(--space-sm);
     color: var(--color-gray-technical);
+  }
+
+  .contact-form__status[data-status-kind='success'] {
+    border-left-color: var(--color-success);
+    color: var(--color-graphite);
+  }
+
+  .contact-form__status[data-status-kind='error'] {
+    border-left-color: var(--color-error);
+    color: var(--color-graphite);
   }
 
   @media (max-width: 560px) {
