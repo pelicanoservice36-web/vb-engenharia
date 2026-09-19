@@ -78,6 +78,10 @@
 
   .tab-accordion.is-enhanced .tab-accordion__summary {
     grid-column: 1;
+    /* Sem isso, o gatilho esticava (stretch é o padrão do grid) até a
+       altura da linha inteira — que agora é ditada pelo painel ativo,
+       compartilhando a mesma linha (ver regras nth-child abaixo). */
+    align-self: start;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     background: var(--color-surface);
@@ -90,10 +94,51 @@
 
   .tab-accordion.is-enhanced .tab-accordion__panel {
     grid-column: 2;
-    grid-row: 1 / -1;
     align-self: start;
     padding: var(--space-lg);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
+  }
+
+  /*
+    Cada painel fica na MESMA linha do seu próprio gatilho. Antes, o painel
+    usava `grid-row: 1 / -1` fixo (sempre a partir do topo) — como só um
+    painel fica visível por vez, isso fazia o conteúdo aparecer sempre
+    colado na primeira linha, desalinhado do item realmente selecionado
+    quando este não era o primeiro da lista (ex.: "Manutenção", o 3º item).
+    Regras repetidas por posição porque `display: contents` no item
+    impede resolver isso com um seletor único.
+  */
+  .tab-accordion.is-enhanced .tab-accordion__item:nth-child(1) > .tab-accordion__summary,
+  .tab-accordion.is-enhanced .tab-accordion__item:nth-child(1) > .tab-accordion__panel {
+    grid-row: 1;
+  }
+  .tab-accordion.is-enhanced .tab-accordion__item:nth-child(2) > .tab-accordion__summary,
+  .tab-accordion.is-enhanced .tab-accordion__item:nth-child(2) > .tab-accordion__panel {
+    grid-row: 2;
+  }
+  .tab-accordion.is-enhanced .tab-accordion__item:nth-child(3) > .tab-accordion__summary,
+  .tab-accordion.is-enhanced .tab-accordion__item:nth-child(3) > .tab-accordion__panel {
+    grid-row: 3;
+  }
+  .tab-accordion.is-enhanced .tab-accordion__item:nth-child(4) > .tab-accordion__summary,
+  .tab-accordion.is-enhanced .tab-accordion__item:nth-child(4) > .tab-accordion__panel {
+    grid-row: 4;
+  }
+  .tab-accordion.is-enhanced .tab-accordion__item:nth-child(5) > .tab-accordion__summary,
+  .tab-accordion.is-enhanced .tab-accordion__item:nth-child(5) > .tab-accordion__panel {
+    grid-row: 5;
+  }
+  .tab-accordion.is-enhanced .tab-accordion__item:nth-child(6) > .tab-accordion__summary,
+  .tab-accordion.is-enhanced .tab-accordion__item:nth-child(6) > .tab-accordion__panel {
+    grid-row: 6;
+  }
+  .tab-accordion.is-enhanced .tab-accordion__item:nth-child(7) > .tab-accordion__summary,
+  .tab-accordion.is-enhanced .tab-accordion__item:nth-child(7) > .tab-accordion__panel {
+    grid-row: 7;
+  }
+  .tab-accordion.is-enhanced .tab-accordion__item:nth-child(8) > .tab-accordion__summary,
+  .tab-accordion.is-enhanced .tab-accordion__item:nth-child(8) > .tab-accordion__panel {
+    grid-row: 8;
   }
 }
